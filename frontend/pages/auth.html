@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LeatherCraft | Sign In</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="../css/theme.css" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-highest": "#e4e2e1",
+          "primary-fixed": "#ffdad4",
+          "on-surface": "#1b1c1c",
+          "primary-container": "#6e524d",
+          "on-primary-container": "#ecc7c0",
+          "tertiary": "#00446c",
+          "on-error": "#ffffff",
+          "tertiary-fixed": "#cee5ff",
+          "surface-container": "#f0eded",
+          "surface-container-low": "#f6f3f2",
+          "secondary-fixed-dim": "#ffb77b",
+          "tertiary-container": "#155c8c",
+          "on-surface-variant": "#54433a",
+          "secondary-container": "#fdad67",
+          "on-secondary-container": "#763f00",
+          "on-primary-fixed": "#2b1613",
+          "error-container": "#ffdad6",
+          "surface-tint": "#745853",
+          "secondary-fixed": "#ffdcc2",
+          "on-secondary-fixed-variant": "#6d3a00",
+          "surface": "#fcf9f8",
+          "primary-fixed-dim": "#e3beb8",
+          "on-background": "#1b1c1c",
+          "secondary": "#8c4f10",
+          "on-secondary": "#ffffff",
+          "surface-variant": "#e4e2e1",
+          "on-secondary-fixed": "#2e1500",
+          "surface-container-lowest": "#ffffff",
+          "on-primary-fixed-variant": "#5b403c",
+          "surface-bright": "#fcf9f8"
+        },
+        borderRadius: {
+          DEFAULT: "0.125rem",
+          lg: "0.25rem",
+          xl: "0.5rem",
+          full: "0.75rem"
+        },
+        fontFamily: {
+          headline: ["Noto Serif"],
+          body: ["Manrope"],
+          label: ["Manrope"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: 'Manrope', sans-serif; }
+  .font-serif { font-family: 'Noto Serif', serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+
+  .login-gradient {
+    background: linear-gradient(135deg, #543b36 0%, #6e524d 100%);
+  }
+
+  /* ── Floating label animation ── */
+  input:focus + label,
+  input:not(:placeholder-shown) + label {
+    transform: translateY(-1.5rem) scale(0.85);
+    color: #8c4f10;
+  }
+  .dark input:focus + label,
+  .dark input:not(:placeholder-shown) + label {
+    color: #ffb77b;
+  }
+
+  /* ── FIX: Input text & placeholder visible in dark mode ── */
+  .dark input,
+  .dark select {
+    color: #e4e2e1 !important;
+    background-color: transparent !important;
+    caret-color: #ffb77b;
+  }
+  /* placeholder-shown but actual placeholder text (the " " space trick keeps label up) */
+  .dark input::placeholder {
+    color: rgba(176, 151, 141, 0.4);
+  }
+  /* The floating label itself in dark */
+  .dark .field-label {
+    color: rgba(176, 151, 141, 0.55);
+  }
+
+  /* ── Role tab active indicator ── */
+  .role-tab {
+    transition: all 0.2s ease;
+  }
+  .role-tab.active {
+    background-color: #543b36;
+    color: #ffffff;
+  }
+  .dark .role-tab.active {
+    background-color: #8c4f10;
+    color: #ffffff;
+  }
+  .role-tab:not(.active) {
+    background-color: transparent;
+    color: #54433a;
+  }
+  .dark .role-tab:not(.active) {
+    color: rgba(176, 151, 141, 0.7);
+  }
+
+  /* Border on focused input in dark */
+  .dark .auth-input:focus {
+    border-color: #ffb77b !important;
+  }
+
+  /* Hero panel */
+  .hero-panel {
+    background: linear-gradient(160deg, #3a2720 0%, #543b36 50%, #6e524d 100%);
+  }
+
+  /* Smooth form transitions */
+  #formFields > div {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  /* Page fade in */
+  main { animation: fadeIn 0.4s ease both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+
+<body class="bg-surface text-on-surface transition-colors duration-300">
+
+<!-- Theme Toggle -->
+<div class="fixed top-6 right-6 z-50">
+  <button id="themeToggleBtn" class="p-3 rounded-full bg-surface-container-high dark:bg-[#262423] text-primary dark:text-[#e3beb8] hover:bg-surface-container-highest dark:hover:bg-[#333130] transition-all duration-300 flex items-center justify-center shadow-sm">
+    <span id="themeIcon" class="material-symbols-outlined">light_mode</span>
+  </button>
+</div>
+
+<main class="min-h-screen flex flex-col md:flex-row">
+
+  <!-- ─── Brand / Hero Panel ─────────────────────────────────────────────── -->
+  <section class="hidden md:flex md:w-[45%] relative overflow-hidden hero-panel items-center justify-center p-12">
+    <div class="absolute inset-0 opacity-30">
+      <img class="w-full h-full object-cover grayscale brightness-50"
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsKhNVh6MmcuNqRH8Eh-wIe8sKJ78hF1NBXQTKPIitpRmrF-bjfBL-wuVTglQcSXKJlVRKgShpoiltkOu0JbRtsUEsh4NBofRwyqDcMcVCXPuPOBlpPCplcq3T2lGm0XRxqr1JcDppW_QTgsx_6lSvAvFQDUaHS8oPpvVvkb3j6ZsXR6AqJ_WmsRbyoes9Wfx4CYyd4pXUsLvX8i5NlluWhpKuv3BWx7TLKHxJK2Ni8n7u5n5qi_TXY7fh_NaMldZkq6rjGCBEwMur"
+        alt="Leather craft texture"/>
+    </div>
+    <div class="relative z-10 max-w-lg text-left space-y-10">
+      <div>
+        <h1 class="font-serif text-6xl font-bold tracking-tighter text-[#ecc7c0] leading-none">LeatherCraft</h1>
+        <p class="font-serif italic text-2xl text-[#ecc7c0]/70 mt-3">The Atelier Digital</p>
+      </div>
+      <div class="space-y-4">
+        <p class="text-[#ecc7c0]/60 text-lg leading-relaxed max-w-md">
+          Where heritage craftsmanship meets technical precision. Access your workshop blueprints, inventory metrics, and artisan journals.
+        </p>
+        <div class="h-px w-20 bg-[#8c4f10]"></div>
+      </div>
+      <!-- Feature pills -->
+      <div class="space-y-3 pt-4">
+        <div class="flex items-center gap-3 text-[#ecc7c0]/60 text-sm">
+          <span class="material-symbols-outlined text-[#8c4f10]" style="font-variation-settings:'FILL' 1;">architecture</span>
+          Blueprint & design management
+        </div>
+        <div class="flex items-center gap-3 text-[#ecc7c0]/60 text-sm">
+          <span class="material-symbols-outlined text-[#8c4f10]" style="font-variation-settings:'FILL' 1;">layers</span>
+          Premium leather inventory tracking
+        </div>
+        <div class="flex items-center gap-3 text-[#ecc7c0]/60 text-sm">
+          <span class="material-symbols-outlined text-[#8c4f10]" style="font-variation-settings:'FILL' 1;">payments</span>
+          Cost estimation & margin analysis
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Auth Form Section ──────────────────────────────────────────────── -->
+  <section class="flex-1 flex items-center justify-center p-6 md:p-16 bg-[#fcf9f8] dark:bg-[#1b1c1c] transition-colors duration-300">
+    <div class="w-full max-w-md space-y-10">
+
+      <!-- Mobile logo -->
+      <div class="md:hidden">
+        <h1 class="font-serif text-3xl font-bold tracking-tighter text-primary dark:text-[#e3beb8]">LeatherCraft</h1>
+      </div>
+
+      <!-- Heading -->
+      <div class="space-y-1">
+        <h2 id="formHeading" class="font-serif text-4xl font-bold text-[#1b1c1c] dark:text-[#e4e2e1] tracking-tight">Sign In</h2>
+        <p id="formSubheading" class="text-[#54433a]/70 dark:text-[#a89388]/70 font-body text-sm">Enter your credentials to access your workbench.</p>
+      </div>
+
+      <!-- ── Role Selector ─────────────────────────────────────────────── -->
+      <div class="p-1 rounded-xl bg-[#f0eded] dark:bg-[#262423] flex gap-1">
+        <button id="roleArtisan" class="role-tab active flex-1 py-3 rounded-lg text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2" onclick="selectRole('Artisan')">
+          <span class="material-symbols-outlined text-sm">handyman</span> Artisan
+        </button>
+        <button id="roleAdmin" class="role-tab flex-1 py-3 rounded-lg text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2" onclick="selectRole('Admin')">
+          <span class="material-symbols-outlined text-sm">admin_panel_settings</span> Admin
+        </button>
+      </div>
+
+      <!-- ── Form ──────────────────────────────────────────────────────── -->
+      <form id="authForm" class="space-y-7">
+
+        <div id="formFields" class="space-y-7">
+
+          <!-- Name field (register only, hidden by default) -->
+          <div id="nameFieldWrapper" class="relative group hidden">
+            <input
+              id="artisan-name"
+              type="text"
+              placeholder=" "
+              class="auth-input peer w-full bg-[#f6f3f2] dark:bg-[#1f1c1b] border-b-2 border-[#dac2b6] dark:border-[#3a2f2b] py-4 px-0 text-[#1b1c1c] dark:text-[#e4e2e1] focus:outline-none focus:border-[#8c4f10] dark:focus:border-[#ffb77b] transition-all font-body text-base"
+            />
+            <label for="artisan-name" class="field-label absolute left-0 top-4 pointer-events-none transition-all origin-left font-label text-sm uppercase tracking-wider">
+              Full Name
+            </label>
+          </div>
+
+          <!-- Email field -->
+          <div class="relative group">
+            <input
+              id="artisan-id"
+              type="email"
+              placeholder=" "
+              required
+              class="auth-input peer w-full bg-[#f6f3f2] dark:bg-[#1f1c1b] border-b-2 border-[#dac2b6] dark:border-[#3a2f2b] py-4 px-0 text-[#1b1c1c] dark:text-[#e4e2e1] focus:outline-none focus:border-[#8c4f10] dark:focus:border-[#ffb77b] transition-all font-body text-base"
+            />
+            <label for="artisan-id" class="field-label absolute left-0 top-4 pointer-events-none transition-all origin-left font-label text-sm uppercase tracking-wider">
+              Email Address
+            </label>
+          </div>
+
+          <!-- Password field -->
+          <div class="relative group">
+            <input
+              id="password"
+              type="password"
+              placeholder=" "
+              required
+              class="auth-input peer w-full bg-[#f6f3f2] dark:bg-[#1f1c1b] border-b-2 border-[#dac2b6] dark:border-[#3a2f2b] py-4 px-0 pr-10 text-[#1b1c1c] dark:text-[#e4e2e1] focus:outline-none focus:border-[#8c4f10] dark:focus:border-[#ffb77b] transition-all font-body text-base"
+            />
+            <label for="password" class="field-label absolute left-0 top-4 pointer-events-none transition-all origin-left font-label text-sm uppercase tracking-wider">
+              Password
+            </label>
+            <button id="togglePassword" type="button" class="absolute right-0 top-4 text-[#54433a]/40 dark:text-[#a89388]/40 hover:text-[#8c4f10] dark:hover:text-[#ffb77b] transition-colors">
+              <span id="eyeIcon" class="material-symbols-outlined text-sm">visibility</span>
+            </button>
+          </div>
+
+          <!-- Confirm Password (register only) -->
+          <div id="confirmPasswordWrapper" class="relative group hidden">
+            <input
+              id="confirm-password"
+              type="password"
+              placeholder=" "
+              class="auth-input peer w-full bg-[#f6f3f2] dark:bg-[#1f1c1b] border-b-2 border-[#dac2b6] dark:border-[#3a2f2b] py-4 px-0 text-[#1b1c1c] dark:text-[#e4e2e1] focus:outline-none focus:border-[#8c4f10] dark:focus:border-[#ffb77b] transition-all font-body text-base"
+            />
+            <label for="confirm-password" class="field-label absolute left-0 top-4 pointer-events-none transition-all origin-left font-label text-sm uppercase tracking-wider">
+              Confirm Password
+            </label>
+          </div>
+
+        </div>
+
+        <!-- Stay logged in / Forgot -->
+        <div id="loginExtras" class="flex items-center justify-between">
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <div class="relative">
+              <input id="stayLoggedIn" class="peer sr-only" type="checkbox"/>
+              <div class="w-5 h-5 border-2 border-[#dac2b6] dark:border-[#3a2f2b] rounded-sm peer-checked:bg-[#8c4f10] peer-checked:border-[#8c4f10] transition-all"></div>
+              <span class="material-symbols-outlined absolute top-0 left-0 text-white text-[1.2rem] opacity-0 peer-checked:opacity-100">check</span>
+            </div>
+            <span class="text-xs font-label uppercase tracking-widest text-[#54433a]/60 dark:text-[#a89388]/50 group-hover:text-[#543b36] dark:group-hover:text-[#e3beb8] transition-colors">Stay Signed In</span>
+          </label>
+          <a href="#" class="text-xs font-label uppercase tracking-widest text-[#8c4f10] dark:text-[#ffb77b] hover:text-[#543b36] dark:hover:text-[#e3beb8] transition-colors">Forgot Password?</a>
+        </div>
+
+        <!-- Error message -->
+        <p id="authError" class="text-center text-[#ba1a1a] dark:text-[#ffb4ab] text-xs font-bold hidden"></p>
+
+        <!-- Submit -->
+        <div class="pt-2">
+          <button id="submitBtn" type="submit"
+            class="w-full login-gradient py-5 rounded-lg text-white font-bold tracking-widest uppercase text-sm shadow-[0_12px_40px_rgba(84,59,54,0.15)] hover:shadow-[0_15px_50px_rgba(84,59,54,0.25)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-300">
+            Sign In
+          </button>
+        </div>
+      </form>
+
+      <!-- Toggle login/register -->
+      <div class="pt-4 border-t border-[#dac2b6]/20 dark:border-[#3a2f2b]/40 text-center">
+        <p class="font-body text-[#54433a]/60 dark:text-[#a89388]/50 text-sm">
+          <span id="togglePrompt">Don't have an account?</span>
+          <!-- FIX: Explicit paths to auth.html; text is clear Login/Register -->
+          <button id="toggleModeBtn" class="ml-2 font-bold text-[#8c4f10] dark:text-[#ffb77b] hover:underline underline-offset-4 transition-all text-sm">
+            Register
+          </button>
+        </p>
+      </div>
+
+      <!-- Decorative icons -->
+      <div class="flex justify-center space-x-10 opacity-10 dark:opacity-5 grayscale pt-2">
+        <span class="material-symbols-outlined text-4xl">architecture</span>
+        <span class="material-symbols-outlined text-4xl">layers</span>
+        <span class="material-symbols-outlined text-4xl">construction</span>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- Status footer -->
+<div class="fixed bottom-6 left-6 hidden md:block">
+  <div class="flex items-center space-x-2 text-[10px] font-label uppercase tracking-[0.3em] text-[#54433a]/30 dark:text-[#a89388]/20">
+    <span class="w-2 h-2 rounded-full bg-[#8c4f10] animate-pulse"></span>
+    <span>Secure Server: Connected</span>
+  </div>
+</div>
+
+<script src="../js/api.js"></script>
+<script>
+
+  // ── Redirect if already logged in ──────────────────────────────────────────
+  if (localStorage.getItem('leathercraft_token')) {
+    window.location.href = '../index.html';
+  }
+
+  // ── Theme Toggle ────────────────────────────────────────────────────────────
+  (function () {
+    const stored = localStorage.getItem('leathercraft_theme') || 'light';
+    const html = document.documentElement;
+    const icon = document.getElementById('themeIcon');
+    if (stored === 'dark') {
+      html.classList.remove('light');
+      html.classList.add('dark');
+      if (icon) icon.textContent = 'dark_mode';
+    }
+    document.getElementById('themeToggleBtn').addEventListener('click', () => {
+      const isDark = html.classList.contains('dark');
+      html.classList.toggle('dark', !isDark);
+      html.classList.toggle('light', isDark);
+      localStorage.setItem('leathercraft_theme', isDark ? 'light' : 'dark');
+      icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+    });
+  })();
+
+  // ── Password Visibility Toggle ──────────────────────────────────────────────
+  document.getElementById('togglePassword').addEventListener('click', () => {
+    const input = document.getElementById('password');
+    const icon  = document.getElementById('eyeIcon');
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    icon.textContent = isHidden ? 'visibility_off' : 'visibility';
+  });
+
+  // ── State ───────────────────────────────────────────────────────────────────
+  let isLoginMode = true;
+  let selectedRole = 'Artisan'; // 'Artisan' or 'Admin'
+
+  // ── Role Selection ──────────────────────────────────────────────────────────
+  function selectRole(role) {
+    selectedRole = role;
+    document.getElementById('roleArtisan').classList.toggle('active', role === 'Artisan');
+    document.getElementById('roleAdmin').classList.toggle('active', role === 'Admin');
+  }
+
+  // ── Mode: Login ↔ Register ──────────────────────────────────────────────────
+  function setMode(loginMode) {
+    isLoginMode = loginMode;
+
+    // Heading & subheading
+    document.getElementById('formHeading').textContent    = loginMode ? 'Sign In' : 'Create Account';
+    document.getElementById('formSubheading').textContent = loginMode
+      ? 'Enter your credentials to access your workbench.'
+      : 'Register a new account to join the atelier.';
+
+    // Show/hide fields
+    document.getElementById('nameFieldWrapper').classList.toggle('hidden', loginMode);
+    document.getElementById('artisan-name').required = !loginMode;
+    document.getElementById('confirmPasswordWrapper').classList.toggle('hidden', loginMode);
+    document.getElementById('confirm-password').required = !loginMode;
+    document.getElementById('loginExtras').classList.toggle('hidden', !loginMode);
+
+    // Submit button text
+    document.getElementById('submitBtn').textContent = loginMode ? 'Sign In' : 'Register';
+
+    // Toggle prompt
+    document.getElementById('togglePrompt').textContent = loginMode ? "Don't have an account?" : 'Already have an account?';
+    document.getElementById('toggleModeBtn').textContent = loginMode ? 'Register' : 'Login';
+
+    // Clear errors
+    const err = document.getElementById('authError');
+    err.classList.add('hidden');
+    err.textContent = '';
+  }
+
+  document.getElementById('toggleModeBtn').addEventListener('click', () => setMode(!isLoginMode));
+
+  // ── Form Submit ─────────────────────────────────────────────────────────────
+  document.getElementById('authForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email    = document.getElementById('artisan-id').value.trim();
+    const password = document.getElementById('password').value;
+    const errEl    = document.getElementById('authError');
+    const btn      = document.getElementById('submitBtn');
+
+    errEl.classList.add('hidden');
+    errEl.textContent = '';
+
+    // Register: validate confirm password
+    if (!isLoginMode) {
+      const name    = document.getElementById('artisan-name').value.trim();
+      const confirm = document.getElementById('confirm-password').value;
+
+      if (!name) {
+        errEl.textContent = 'Full name is required.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      if (password !== confirm) {
+        errEl.textContent = 'Passwords do not match.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      if (password.length < 6) {
+        errEl.textContent = 'Password must be at least 6 characters.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Please wait…';
+
+    try {
+      let res;
+      if (isLoginMode) {
+        res = await window.api.login(email, password);
+      } else {
+        const name = document.getElementById('artisan-name').value.trim();
+        // FIX: Pass the selected role ('Admin' or 'Artisan') to the register API
+        res = await window.api.register(name, email, password, selectedRole);
+      }
+
+      // Persist token + user (includes role from API response)
+      localStorage.setItem('leathercraft_token', res.token);
+      localStorage.setItem('leathercraft_user', JSON.stringify(res));
+
+      // Redirect to dashboard
+      // FIX: Correct relative path from pages/ back to root index
+      window.location.href = '../index.html';
+
+    } catch (err) {
+      let msg = err.message;
+      try { msg = JSON.parse(err.message).message || msg; } catch (_) {}
+      errEl.textContent = msg || 'Authentication failed. Please try again.';
+      errEl.classList.remove('hidden');
+      btn.disabled = false;
+      btn.textContent = isLoginMode ? 'Sign In' : 'Register';
+    }
+  });
+
+</script>
+</body>
+</html>

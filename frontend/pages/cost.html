@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LeatherCraft | Cost Estimation Engine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="../css/theme.css" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-highest": "#e4e2e1",
+          "primary-fixed": "#ffdad4",
+          "on-surface": "#1b1c1c",
+          "primary-container": "#6e524d",
+          "on-primary-container": "#ecc7c0",
+          "tertiary": "#00446c",
+          "on-error": "#ffffff",
+          "tertiary-fixed": "#cee5ff",
+          "surface-container": "#f0eded",
+          "surface-container-low": "#f6f3f2",
+          "secondary-fixed-dim": "#ffb77b",
+          "tertiary-container": "#155c8c",
+          "on-surface-variant": "#54433a",
+          "secondary-container": "#fdad67",
+          "on-secondary-container": "#763f00",
+          "outline": "#877369",
+          "background": "#fcf9f8",
+          "on-tertiary": "#ffffff",
+          "inverse-on-surface": "#f3f0ef",
+          "on-tertiary-fixed": "#001d32",
+          "on-tertiary-fixed-variant": "#004a75",
+          "surface-dim": "#dcd9d9",
+          "inverse-surface": "#303030",
+          "on-error-container": "#93000a",
+          "error": "#ba1a1a",
+          "primary": "#543b36",
+          "inverse-primary": "#e3beb8",
+          "surface-container-high": "#eae7e7",
+          "on-primary": "#ffffff",
+          "tertiary-fixed-dim": "#96ccff",
+          "outline-variant": "#dac2b6",
+          "on-primary-fixed": "#2b1613",
+          "error-container": "#ffdad6",
+          "surface-tint": "#745853",
+          "secondary-fixed": "#ffdcc2",
+          "on-secondary-fixed-variant": "#6d3a00",
+          "surface": "#fcf9f8",
+          "primary-fixed-dim": "#e3beb8",
+          "on-background": "#1b1c1c",
+          "secondary": "#8c4f10",
+          "on-secondary": "#ffffff",
+          "surface-variant": "#e4e2e1",
+          "on-secondary-fixed": "#2e1500",
+          "surface-container-lowest": "#ffffff",
+          "on-primary-fixed-variant": "#5b403c",
+          "surface-bright": "#fcf9f8"
+        },
+        borderRadius: {
+          DEFAULT: "0.125rem",
+          lg: "0.25rem",
+          xl: "0.5rem",
+          full: "0.75rem"
+        },
+        fontFamily: {
+          headline: ["Noto Serif"],
+          body: ["Manrope"],
+          label: ["Manrope"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: 'Manrope', sans-serif; }
+  .font-serif { font-family: 'Noto Serif', serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: #8c4f10;
+    cursor: pointer;
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: #8c4f10;
+    cursor: pointer;
+    border: none;
+  }
+
+  #addHardwareModal .modal-inner {
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  /* ── PDF / Print styles ── */
+  @media print {
+    @page { margin: 1.5cm; }
+    body  { background: #fff !important; color: #1b1c1c !important; font-size: 12px; }
+    header, aside, nav.bottom-nav, #printBtn, #addHardwareBtn,
+    .no-print, button.delete-hw { display: none !important; }
+    main  { margin: 0 !important; padding: 0 !important; }
+    .sticky { position: static !important; }
+    .md\:ml-64 { margin-left: 0 !important; }
+    .grid { display: block !important; }
+    .lg\:col-span-7, .lg\:col-span-5 { width: 100% !important; display: block; margin-bottom: 20px; }
+    .space-y-12 > * + * { margin-top: 20px !important; }
+    .space-y-6  > * + * { margin-top: 12px !important; }
+    .shadow-sm, .shadow-xl { box-shadow: none !important; }
+    .rounded-xl { border-radius: 6px !important; }
+    .bg-\[\#543b36\] { background: #543b36 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .bg-\[\#eae7e7\] { background: #eae7e7 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .border-4 { border: 3px solid #8c4f10 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .dark\:bg-\[\#262423\] { background: #fff !important; }
+    .dark\:bg-\[\#1f1c1b\]  { background: #f6f3f2 !important; }
+    #printTimestamp { display: block !important; margin-top: 12px; padding-top: 12px; border-top: 1px solid #dac2b6; font-size: 10px; color: #877369; }
+    select, input[type=number] { border: none; background: transparent !important; }
+  }
+</style>
+</head>
+
+<body class="bg-[#fcf9f8] dark:bg-[#1b1c1c] text-[#1b1c1c] dark:text-[#f0eded] selection:bg-secondary-fixed selection:text-on-secondary-fixed transition-colors duration-300">
+
+<!-- TopAppBar -->
+<header class="font-serif italic tracking-tight text-lg top-0 bg-[#f6f3f2] dark:bg-[#262423] transition-colors duration-300 shadow-[0_4px_20px_rgba(84,59,54,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex justify-between items-center w-full px-8 py-4 sticky z-50">
+  <div class="font-serif text-2xl font-bold tracking-tighter text-[#543b36] dark:text-[#e3beb8]">LeatherCraft</div>
+  <nav class="hidden md:flex items-center space-x-12">
+    <a class="text-[#543b36]/70 dark:text-[#e3beb8]/60 hover:text-[#543b36] dark:hover:text-[#e3beb8] hover:bg-[#f0eded] dark:hover:bg-[#333130] rounded-md transition-all px-2 py-1" href="../index.html">Workshop</a>
+    <a class="text-[#543b36]/70 dark:text-[#e3beb8]/60 hover:text-[#543b36] dark:hover:text-[#e3beb8] hover:bg-[#f0eded] dark:hover:bg-[#333130] rounded-md transition-all px-2 py-1" href="./inventory.html">Inventory</a>
+    <a class="text-[#543b36]/70 dark:text-[#e3beb8]/60 hover:text-[#543b36] dark:hover:text-[#e3beb8] hover:bg-[#f0eded] dark:hover:bg-[#333130] rounded-md transition-all px-2 py-1" href="./archive.html">Journal</a>
+  </nav>
+  <div class="flex items-center space-x-4">
+    <button id="theme-toggle" class="material-symbols-outlined text-[#543b36] dark:text-[#e3beb8] active:scale-95 duration-200 p-2 rounded-md hover:bg-[#f0eded] dark:hover:bg-[#333130] transition-colors">light_mode</button>
+    <button class="material-symbols-outlined text-[#543b36] dark:text-[#e3beb8] active:scale-95 duration-200 p-2 rounded-md hover:bg-[#f0eded] dark:hover:bg-[#333130] transition-colors">account_circle</button>
+  </div>
+</header>
+
+<div class="flex min-h-screen">
+
+  <!-- SideNavBar -->
+  <aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 bg-gradient-to-b from-[#fcf9f8] to-[#f6f3f2] dark:from-[#1b1c1c] dark:to-[#161616] border-r border-[#dac2b6]/20 dark:border-[#3a2f2b]/40 py-8 space-y-6 z-40 transition-colors duration-300">
+    <div class="px-8">
+      <h2 class="font-serif italic text-xl text-[#543b36] dark:text-[#e3beb8]">LeatherCraft</h2>
+      <p class="font-sans tracking-wide text-[10px] uppercase text-[#543b36]/60 dark:text-[#e3beb8]/40">Premium Grade</p>
+    </div>
+    <nav class="flex-1 space-y-2">
+      <a class="flex items-center gap-4 text-[#543b36]/60 dark:text-[#e3beb8]/40 hover:pl-6 hover:text-[#543b36] dark:hover:text-[#e3beb8] transition-all px-8 py-3 font-sans tracking-wide text-sm uppercase" href="../index.html">
+        <span class="material-symbols-outlined">architecture</span> Blueprints
+      </a>
+      <a class="flex items-center gap-4 text-[#543b36]/60 dark:text-[#e3beb8]/40 hover:pl-6 hover:text-[#543b36] dark:hover:text-[#e3beb8] transition-all px-8 py-3 font-sans tracking-wide text-sm uppercase" href="./inventory.html">
+        <span class="material-symbols-outlined">layers</span> Materials
+      </a>
+      <a class="flex items-center gap-4 bg-[#fcf9f8] dark:bg-[#2a2220] text-[#8c4f10] dark:text-[#fdad67] rounded-l-full ml-4 pl-4 py-3 shadow-sm font-sans tracking-wide text-sm uppercase font-semibold transition-colors duration-300" href="./cost.html">
+        <span class="material-symbols-outlined">payments</span> Ledger
+      </a>
+      <a class="flex items-center gap-4 text-[#543b36]/60 dark:text-[#e3beb8]/40 hover:pl-6 hover:text-[#543b36] dark:hover:text-[#e3beb8] transition-all px-8 py-3 font-sans tracking-wide text-sm uppercase" href="./archive.html">
+        <span class="material-symbols-outlined">history</span> Archive
+      </a>
+    </nav>
+    <div class="px-6">
+      <button class="w-full py-4 bg-gradient-to-br from-[#543b36] to-[#6e524d] dark:from-[#8c4f10] dark:to-[#6d3a00] text-white rounded-xl font-bold active:translate-x-1 transition-all shadow-lg text-sm tracking-widest uppercase">
+        New Commission
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 md:ml-64 pb-24 md:pb-12 pt-8 px-6 md:px-12 bg-[#fcf9f8] dark:bg-[#1b1c1c] transition-colors duration-300">
+
+    <section class="mb-12">
+      <div class="max-w-6xl mx-auto">
+        <span class="uppercase tracking-[0.2em] text-[#8c4f10] dark:text-[#fdad67] font-bold mb-2 block text-sm">Business Utility</span>
+        <h1 class="font-serif text-5xl md:text-6xl text-[#543b36] dark:text-[#e3beb8] tracking-tight font-bold mb-4">Cost Estimation <br class="hidden md:block"/> &amp; Margin Analysis</h1>
+        <p class="text-[#54433a] dark:text-[#a89388] max-w-2xl leading-relaxed">Precision planning for your next masterpiece. Define material usage, artisan labor, and hardware overhead to determine your luxury market value.</p>
+      </div>
+    </section>
+
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- Left Column -->
+      <div class="lg:col-span-7 space-y-12">
+
+        <!-- ── MATERIAL SELECTION ── -->
+        <div class="bg-white dark:bg-[#262423] rounded-xl p-8 shadow-sm dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)] transition-colors duration-300">
+          <div class="flex items-center justify-between mb-8">
+            <h3 class="font-serif text-2xl text-[#543b36] dark:text-[#e3beb8] font-bold">Material Selection</h3>
+            <span class="material-symbols-outlined text-[#8c4f10] dark:text-[#fdad67]">inventory_2</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label class="uppercase tracking-widest text-[#54433a] dark:text-[#a89388] text-xs font-semibold block">Leather Grade</label>
+              <!-- data-price = price per sq ft in USD; adjust for your own pricing -->
+              <select id="leatherGrade" class="w-full bg-[#f6f3f2] dark:bg-[#1f1c1b] dark:text-[#e3beb8] border-b-2 border-[#dac2b6] dark:border-[#3a2f2b] focus:border-[#8c4f10] focus:ring-0 transition-colors py-3 px-0 font-medium">
+                <option value="Full Grain Shell Cordovan" data-price="28.50">Full Grain Shell Cordovan</option>
+                <option value="Top Grain Veg-Tan"         data-price="14.00">Top Grain Veg-Tan</option>
+                <option value="Nubuck Calfskin"           data-price="18.75">Nubuck Calfskin</option>
+                <option value="Suede Split"               data-price="8.00">Suede Split</option>
+              </select>
+            </div>
+            <div class="space-y-2">
+              <label class="uppercase tracking-widest text-[#54433a] dark:text-[#a89388] text-xs font-semibold block">Quantity (Sq Ft)</label>
+              <input id="leatherQty" class="w-full bg-[#f6f3f2] dark:bg-[#1f1c1b] dark:text-[#e3beb8] border-b-2 border-[#dac2b6] dark:border-[#3a2f2b] focus:border-[#8c4f10] focus:ring-0 transition-colors py-3 px-0 font-medium" type="number" min="0" step="0.5" value="12"/>
+            </div>
+          </div>
+          <!-- Live feedback row -->
+          <div class="mt-5 flex items-center justify-between text-sm bg-[#f6f3f2] dark:bg-[#1f1c1b] px-4 py-3 rounded-lg">
+            <span class="text-[#54433a] dark:text-[#a89388]">
+              Price per sq ft: <span id="pricePerSqFt" class="font-bold text-[#543b36] dark:text-[#e3beb8]">—</span>
+            </span>
+            <span class="text-[#54433a] dark:text-[#a89388]">
+              Subtotal: <span id="materialSubtotal" class="font-bold text-[#8c4f10] dark:text-[#fdad67]">—</span>
+            </span>
+          </div>
+          <!-- Swatches — click to select grade -->
+          <div class="mt-8 flex gap-4 overflow-x-auto pb-4 hide-scrollbar">
+            <div data-grade="Full Grain Shell Cordovan" class="leather-swatch flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden group cursor-pointer border-2 border-[#8c4f10] transition-all">
+              <img alt="Full Grain Shell Cordovan" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzBTvzzWu-ieQSDQfNcrdUg3E0SJJHYu_MI68RZ8Vt070k4itSi_ny2AeznHzLpHgxgXlv105_aCtCtPS2l9r3d-l7pIAtY1T5cPD8RCLINetrO26YhKfdSvWV8DodV7cxNat4qg4ivo0k6GwMbuqFfO7D2nbJ2OPQU3uohC_B0g8KyhWy43NNhaUfbfOw5SOREzvcbFUL9CykUFc9qvks1gv_5v-9dKP6H4wkGIY_p-zXKMSXoTLI5q70B2D8cE4vxjgjvGqwlRMz"/>
+            </div>
+            <div data-grade="Top Grain Veg-Tan" class="leather-swatch flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden group cursor-pointer border-2 border-transparent hover:border-[#8c4f10] dark:hover:border-[#fdad67] transition-all">
+              <img alt="Top Grain Veg-Tan" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAstOP50yWLIOH7-E1MbO8iulerwMNl1v49PdMWaS2CRxkUH0iMc1DXioQE1sSWfUDHjbT2FhyoB1JT41xY-ZW8HCsK3pBouITVP6s-fX49Hg9TPDAMwcKtmHuJ08wcVb1GwtJEU1uLUeFfGjeOrlRCeUzsFW4ijgj1QrqFYqte1UgesTCgkSw1mV0h4IFam5q3DO-Kn93XECrdKnDFwoPgu-puXeDOQSYnhrVoIZrEZHp0csWPb8gaaMxtqCQY0M2kCX0lnwDPHMa7"/>
+            </div>
+            <div data-grade="Nubuck Calfskin" class="leather-swatch flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden group cursor-pointer border-2 border-transparent hover:border-[#8c4f10] dark:hover:border-[#fdad67] transition-all">
+              <img alt="Nubuck Calfskin" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPSQsBCFe4PS0ao4e5LyZ-19Ba6OTBN2clrC46hDK3Lv30xr2kFhwCvmuIRtzmbVrHB754O0g9TrFwSZsqSofE4cG3BeWEpqJmoIA9uQbkFJydZilEw__QLVR3AyNE9hf8okF2Se7g5qTGunRgF5Hn0JH9TMaS6NdoJrdlm0OSOr838jDR59bS1ULqNoMY0y2mCUNU8dzE-GC6g62N-jbq1j9F_J7G3oAYXFEWiX1_LNCX8jG_pifuESXWb3uzKN1OGvjqlqzzRp9J"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── ARTISAN LABOR ── -->
+        <div class="bg-white dark:bg-[#262423] rounded-xl p-8 shadow-sm dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)] transition-colors duration-300">
+          <div class="flex items-center justify-between mb-8">
+            <h3 class="font-serif text-2xl text-[#543b36] dark:text-[#e3beb8] font-bold">Artisan Labor</h3>
+            <span class="material-symbols-outlined text-[#8c4f10] dark:text-[#fdad67]">handyman</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-4">
+              <label class="uppercase tracking-widest text-[#54433a] dark:text-[#a89388] text-xs font-semibold block">
+                Master Rate (<span id="laborRateSymbol">$</span>/hr)
+              </label>
+              <div class="relative">
+                <span id="laborRatePrefix" class="absolute left-0 top-3 text-[#54433a] dark:text-[#a89388] font-bold">$</span>
+                <input id="laborRate" class="w-full pl-6 bg-transparent border-b-2 border-[#dac2b6] dark:border-[#3a2f2b] dark:text-[#e3beb8] focus:border-[#8c4f10] focus:ring-0 transition-colors py-3 px-0 font-medium text-xl" type="number" min="0" step="0.5" value="85"/>
+              </div>
+            </div>
+            <div class="space-y-4">
+              <label class="uppercase tracking-widest text-[#54433a] dark:text-[#a89388] text-xs font-semibold block">Estimated Time (hrs)</label>
+              <div class="flex items-end gap-4">
+                <input id="laborHours" class="w-full bg-transparent border-b-2 border-[#dac2b6] dark:border-[#3a2f2b] dark:text-[#e3beb8] focus:border-[#8c4f10] focus:ring-0 transition-colors py-3 px-0 font-medium text-xl" type="number" min="0" step="0.5" value="14.5"/>
+                <span class="pb-3 text-[#54433a] dark:text-[#a89388] font-medium">h</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-5 flex justify-end bg-[#f6f3f2] dark:bg-[#1f1c1b] px-4 py-3 rounded-lg">
+            <span class="text-sm text-[#54433a] dark:text-[#a89388]">
+              Labor subtotal: <span id="laborSubtotal" class="font-bold text-[#8c4f10] dark:text-[#fdad67]">—</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- ── HARDWARE & TRIM ── -->
+        <div class="bg-white dark:bg-[#262423] rounded-xl p-8 shadow-sm dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)] transition-colors duration-300">
+          <div class="flex items-center justify-between mb-8">
+            <h3 class="font-serif text-2xl text-[#543b36] dark:text-[#e3beb8] font-bold">Hardware &amp; Trim</h3>
+            <button id="addHardwareBtn" class="no-print text-[#8c4f10] dark:text-[#fdad67] font-bold uppercase tracking-widest flex items-center gap-2 text-sm hover:opacity-75 active:scale-95 transition-all">
+              <span class="material-symbols-outlined text-sm">add</span> Add Item
+            </button>
+          </div>
+          <div id="hardwareList" class="space-y-4">
+            <!-- Rendered by JS -->
+          </div>
+          <div class="mt-5 flex justify-end bg-[#f6f3f2] dark:bg-[#1f1c1b] px-4 py-3 rounded-lg">
+            <span class="text-sm text-[#54433a] dark:text-[#a89388]">
+              Hardware subtotal: <span id="hardwareSubtotal" class="font-bold text-[#8c4f10] dark:text-[#fdad67]">—</span>
+            </span>
+          </div>
+        </div>
+
+      </div><!-- /left col -->
+
+      <!-- ── RIGHT COLUMN ── -->
+      <div class="lg:col-span-5">
+        <div class="sticky top-28 space-y-6">
+
+          <!-- Total Production Cost card -->
+          <div class="bg-[#543b36] text-white rounded-xl p-8 shadow-xl relative overflow-hidden">
+            <div class="relative z-10">
+              <p class="uppercase tracking-[0.2em] text-[#ecc7c0] font-bold mb-2 text-sm">Total Production Cost</p>
+              <p id="totalCost" class="font-serif text-5xl font-bold tracking-tighter">—</p>
+              <div class="mt-8 pt-8 border-t border-white/20 space-y-3">
+                <div class="flex justify-between text-sm">
+                  <span class="opacity-70">Materials</span>
+                  <span id="summaryMaterials" class="font-bold">—</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="opacity-70">Labor</span>
+                  <span id="summaryLabor" class="font-bold">—</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="opacity-70">Hardware</span>
+                  <span id="summaryHardware" class="font-bold">—</span>
+                </div>
+              </div>
+            </div>
+            <div class="absolute top-0 right-0 p-4 opacity-10">
+              <span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">calculate</span>
+            </div>
+          </div>
+
+          <!-- Profit Margin Slider -->
+          <div class="bg-[#eae7e7] dark:bg-[#262423] rounded-xl p-8 transition-colors duration-300">
+            <div class="flex justify-between items-center mb-6">
+              <h4 class="font-bold text-[#543b36] dark:text-[#e3beb8] uppercase tracking-widest text-sm">Target Profit Margin</h4>
+              <span id="marginBadge" class="bg-[#8c4f10] dark:bg-[#6d3a00] text-white px-3 py-1 rounded-full text-lg font-bold">45%</span>
+            </div>
+            <input id="marginSlider" class="w-full h-2 bg-[#dac2b6] dark:bg-[#3a2f2b] rounded-lg appearance-none cursor-pointer accent-[#8c4f10]" max="80" min="10" type="range" value="45"/>
+            <div class="flex justify-between mt-4 text-[10px] uppercase font-bold tracking-widest text-[#54433a] dark:text-[#a89388]">
+              <span>Artisan Lean</span>
+              <span>Luxury Retail</span>
+            </div>
+          </div>
+
+          <!-- Suggested Retail Value -->
+          <div class="bg-white dark:bg-[#262423] border-4 border-[#8c4f10] dark:border-[#6d3a00] rounded-xl p-8 shadow-sm transition-colors duration-300">
+            <p class="uppercase tracking-[0.2em] text-[#8c4f10] dark:text-[#fdad67] font-bold mb-2 text-sm">Suggested Retail Value</p>
+            <p id="retailPrice" class="font-serif text-3xl md:text-4xl font-bold text-[#543b36] dark:text-[#e3beb8] tracking-tighter">—</p>
+            <div class="mt-8 flex items-center justify-between">
+              <div class="flex items-center gap-2 text-[#00446c] dark:text-[#96ccff]">
+                <span class="material-symbols-outlined text-sm">trending_up</span>
+                <span id="netProfitLabel" class="text-xs font-bold uppercase tracking-widest">Net Profit: —</span>
+              </div>
+              <button id="printBtn" class="no-print p-4 bg-[#eae7e7] dark:bg-[#1f1c1b] rounded-full text-[#543b36] dark:text-[#e3beb8] hover:bg-[#543b36] hover:text-white dark:hover:bg-[#8c4f10] dark:hover:text-white transition-all active:scale-90" title="Export as PDF">
+                <span class="material-symbols-outlined">file_download</span>
+              </button>
+            </div>
+            <!-- Shows only in PDF -->
+            <p id="printTimestamp" class="hidden text-xs text-[#54433a] mt-4"></p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- BottomNavBar (Mobile) -->
+<nav class="bottom-nav md:hidden fixed bottom-0 left-0 w-full h-20 bg-[#fcf9f8]/95 dark:bg-[#1b1c1c]/95 backdrop-blur-md flex justify-around items-center px-6 pb-safe border-t border-[#dac2b6]/20 dark:border-[#3a2f2b]/40 shadow-[0_-8px_30px_rgba(84,59,54,0.1)] dark:shadow-[0_-8px_30px_rgba(0,0,0,0.4)] z-50 rounded-t-3xl transition-colors duration-300">
+  <a href="../index.html" class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#e3beb8]/40 active:scale-90 transition-transform">
+    <span class="material-symbols-outlined">home_app_logo</span>
+    <span class="font-sans text-[10px] font-medium tracking-widest uppercase">Home</span>
+  </a>
+  <button class="flex flex-col items-center justify-center text-[#8c4f10] dark:text-[#fdad67] bg-[#8c4f10]/5 dark:bg-[#fdad67]/10 rounded-xl px-4 py-1 active:scale-90 transition-transform">
+    <span class="material-symbols-outlined">construction</span>
+    <span class="font-sans text-[10px] font-medium tracking-widest uppercase">Tools</span>
+  </button>
+  <a href="./inventory.html" class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#e3beb8]/40 active:scale-90 transition-transform">
+    <span class="material-symbols-outlined">lock</span>
+    <span class="font-sans text-[10px] font-medium tracking-widest uppercase">Vault</span>
+  </a>
+  <a href="./auth.html" class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#e3beb8]/40 active:scale-90 transition-transform">
+    <span class="material-symbols-outlined">person</span>
+    <span class="font-sans text-[10px] font-medium tracking-widest uppercase">Me</span>
+  </a>
+</nav>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     ADD HARDWARE MODAL
+════════════════════════════════════════════════════════════════ -->
+<div id="addHardwareModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[100]">
+  <div class="modal-inner bg-white dark:bg-[#262423] rounded-xl shadow-2xl w-full max-w-md p-8 scale-95 opacity-0">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="font-serif text-2xl font-bold text-[#543b36] dark:text-[#e3beb8]">Add Hardware Item</h2>
+        <p class="text-xs text-[#54433a] dark:text-[#a89388] mt-1 uppercase tracking-widest">Buckles, thread, zips &amp; more</p>
+      </div>
+      <button id="closeHardwareModal" class="material-symbols-outlined text-[#54433a] dark:text-[#a89388] hover:text-[#543b36] dark:hover:text-[#e3beb8] transition-colors">close</button>
+    </div>
+    <form id="hardwareForm" class="space-y-5">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-[#54433a] dark:text-[#a89388] mb-2">Item Name</label>
+        <input id="hw_name" type="text" placeholder="e.g. Solid Brass Buckles (x2)" required
+          class="w-full bg-[#f6f3f2] dark:bg-[#1f1c1b] dark:text-[#e3beb8] border-b-2 border-[#dac2b6] dark:border-[#3a2f2b] focus:border-[#8c4f10] focus:ring-0 py-3 px-2 text-sm transition-colors"/>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-[#54433a] dark:text-[#a89388] mb-2">Source / Supplier</label>
+          <input id="hw_source" type="text" placeholder="e.g. Italian Foundry"
+            class="w-full bg-[#f6f3f2] dark:bg-[#1f1c1b] dark:text-[#e3beb8] border-b-2 border-[#dac2b6] dark:border-[#3a2f2b] focus:border-[#8c4f10] focus:ring-0 py-3 px-2 text-sm transition-colors"/>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-[#54433a] dark:text-[#a89388] mb-2">
+            Cost (<span id="hwCurrencyLabel">$</span>)
+          </label>
+          <input id="hw_cost" type="number" min="0" step="0.01" placeholder="0.00" required
+            class="w-full bg-[#f6f3f2] dark:bg-[#1f1c1b] dark:text-[#e3beb8] border-b-2 border-[#dac2b6] dark:border-[#3a2f2b] focus:border-[#8c4f10] focus:ring-0 py-3 px-2 text-sm transition-colors"/>
+        </div>
+      </div>
+      <p id="hwError" class="text-xs text-[#ba1a1a] dark:text-[#ffb4ab] hidden text-center font-bold"></p>
+      <div class="flex gap-4 pt-2">
+        <button type="button" id="cancelHardwareBtn"
+          class="flex-1 py-3 border border-[#dac2b6] dark:border-[#3a2f2b] text-[#54433a] dark:text-[#a89388] font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-[#f0eded] dark:hover:bg-[#1f1c1b] transition-all">
+          Cancel
+        </button>
+        <button type="submit" id="hwSubmitBtn"
+          class="flex-1 py-3 bg-[#543b36] dark:bg-[#8c4f10] text-white font-bold text-xs uppercase tracking-widest rounded-lg hover:opacity-90 active:scale-95 transition-all">
+          Save Item
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<script src="../js/api.js"></script>
+<script src="../js/theme.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ── Auth guard ─────────────────────────────────────────────────────────────
+  if (!localStorage.getItem('leathercraft_token')) {
+    window.location.href = './auth.html';
+    return;
+  }
+
+  // ── Currency (from leathercraft_user saved in localStorage) ───────────────
+  const sym = (window.getCurrencySymbol ? window.getCurrencySymbol() : '$');
+
+  function fmt(n) {
+    const user = JSON.parse(localStorage.getItem('leathercraft_user') || '{}');
+    const locale = user.currency === 'INR' ? 'en-IN' : 'en-US';
+    return sym + Number(n).toLocaleString(locale, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  // stamp currency symbol in labels
+  document.getElementById('laborRateSymbol').textContent = sym;
+  document.getElementById('laborRatePrefix').textContent = sym;
+  document.getElementById('hwCurrencyLabel').textContent = sym;
+
+  // ── Hardware items state ───────────────────────────────────────────────────
+  let hardwareItems = []; // [{ _id?, itemName, source, costPerUnit }]
+
+  const HW_ICONS = ['link', 'history_edu', 'bolt', 'settings', 'straighten', 'compress'];
+
+  // ── Load hardware from DB (category = 'hardware') ─────────────────────────
+  async function loadHardware() {
+    try {
+      const all = await window.api.getInventory();
+      hardwareItems = all
+        .filter(i => (i.category || '').toLowerCase() === 'hardware')
+        .map(i => ({
+          _id:         i._id,
+          itemName:    i.itemName,
+          source:      i.supplier || i.source || '',
+          costPerUnit: parseFloat(i.costPerUnit) || 0
+        }));
+    } catch (e) {
+      console.warn('DB unavailable, using seed data:', e.message);
+      hardwareItems = [
+        { itemName: 'Solid Brass Buckles (x2)', source: 'Italian Foundry', costPerUnit: 44.00 },
+        { itemName: 'Waxed Linen Thread',       source: '30m Spool',       costPerUnit: 12.50 }
+      ];
+    }
+    renderHardware();
+    recalculate();
+  }
+
+  // ── Render hardware list ───────────────────────────────────────────────────
+  function renderHardware() {
+    const list = document.getElementById('hardwareList');
+    if (!hardwareItems.length) {
+      list.innerHTML = `
+        <p class="text-sm text-[#54433a] dark:text-[#a89388] italic py-2 text-center">
+          No hardware items yet. Click <strong>Add Item</strong> to begin.
+        </p>`;
+      return;
+    }
+    list.innerHTML = hardwareItems.map((item, i) => `
+      <div class="flex items-center justify-between py-4 bg-[#f6f3f2] dark:bg-[#1f1c1b] px-6 rounded-lg transition-colors duration-300">
+        <div class="flex items-center gap-4">
+          <span class="material-symbols-outlined text-[#877369] dark:text-[#7a6057]">${HW_ICONS[i % HW_ICONS.length]}</span>
+          <div>
+            <p class="font-bold text-[#543b36] dark:text-[#e3beb8]">${item.itemName}</p>
+            <p class="text-xs text-[#54433a] dark:text-[#a89388] uppercase tracking-tighter">${item.source || '—'}</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="font-bold text-[#543b36] dark:text-[#e3beb8]">${fmt(item.costPerUnit)}</span>
+          <button data-index="${i}" class="delete-hw no-print text-[#877369] hover:text-[#ba1a1a] dark:hover:text-[#ffb4ab] transition-colors active:scale-90">
+            <span class="material-symbols-outlined text-[18px]">delete</span>
+          </button>
+        </div>
+      </div>
+    `).join('');
+
+    list.querySelectorAll('.delete-hw').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const idx  = parseInt(btn.dataset.index);
+        const item = hardwareItems[idx];
+        if (item._id) {
+          try { await window.api.deleteInventory(item._id); }
+          catch (e) { console.warn('Delete from DB failed:', e.message); }
+        }
+        hardwareItems.splice(idx, 1);
+        renderHardware();
+        recalculate();
+      });
+    });
+  }
+
+  // ── Core recalculate ──────────────────────────────────────────────────────
+  function recalculate() {
+    // 1. Material cost = pricePerSqFt × qty
+    const gradeEl  = document.getElementById('leatherGrade');
+    const selOpt   = gradeEl.options[gradeEl.selectedIndex];
+    const ppsf     = parseFloat(selOpt.dataset.price) || 0;
+    const qty      = parseFloat(document.getElementById('leatherQty').value) || 0;
+    const matCost  = ppsf * qty;
+
+    // 2. Labor cost = rate × hours
+    const rate     = parseFloat(document.getElementById('laborRate').value)  || 0;
+    const hours    = parseFloat(document.getElementById('laborHours').value) || 0;
+    const labCost  = rate * hours;
+
+    // 3. Hardware = sum of items
+    const hwCost   = hardwareItems.reduce((s, i) => s + (i.costPerUnit || 0), 0);
+
+    // 4. Total
+    const total    = matCost + labCost + hwCost;
+
+    // 5. Retail price using margin slider
+    // margin% = (retail - cost) / retail × 100
+    // → retail = cost / (1 - margin/100)
+    const margin   = parseInt(document.getElementById('marginSlider').value) || 45;
+    const retail   = total > 0 ? total / (1 - margin / 100) : 0;
+    const profit   = retail - total;
+
+    // ── Material box ──
+    document.getElementById('pricePerSqFt').textContent     = fmt(ppsf);
+    document.getElementById('materialSubtotal').textContent = fmt(matCost);
+
+    // ── Labor box ──
+    document.getElementById('laborSubtotal').textContent    = fmt(labCost);
+
+    // ── Hardware box ──
+    document.getElementById('hardwareSubtotal').textContent = fmt(hwCost);
+
+    // ── Summary card ──
+    document.getElementById('totalCost').textContent        = fmt(total);
+    document.getElementById('summaryMaterials').textContent = fmt(matCost);
+    document.getElementById('summaryLabor').textContent     = fmt(labCost);
+    document.getElementById('summaryHardware').textContent  = fmt(hwCost);
+
+    // ── Margin badge ──
+    document.getElementById('marginBadge').textContent      = `${margin}%`;
+
+    // ── Retail card ──
+    document.getElementById('retailPrice').textContent      = fmt(retail);
+    document.getElementById('netProfitLabel').textContent   = `Net Profit: ${fmt(profit)}`;
+
+    // ── Highlight active swatch ──
+    document.querySelectorAll('.leather-swatch').forEach(sw => {
+      const active = sw.dataset.grade === selOpt.value;
+      sw.classList.toggle('border-[#8c4f10]', active);
+      sw.classList.toggle('dark:border-[#fdad67]', active);
+      sw.classList.toggle('border-transparent', !active);
+    });
+  }
+
+  // ── Bind recalculate to all inputs ────────────────────────────────────────
+  ['leatherGrade', 'leatherQty', 'laborRate', 'laborHours', 'marginSlider']
+    .forEach(id => document.getElementById(id).addEventListener('input', recalculate));
+
+  // Swatch click → select grade in dropdown
+  document.querySelectorAll('.leather-swatch').forEach(sw => {
+    sw.addEventListener('click', () => {
+      document.getElementById('leatherGrade').value = sw.dataset.grade;
+      recalculate();
+    });
+  });
+
+  // ── Hardware Modal open/close ──────────────────────────────────────────────
+  function openModal() {
+    const modal = document.getElementById('addHardwareModal');
+    const inner = modal.querySelector('.modal-inner');
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      inner.classList.remove('scale-95', 'opacity-0');
+      inner.classList.add('scale-100', 'opacity-100');
+    });
+  }
+  function closeModal() {
+    const modal = document.getElementById('addHardwareModal');
+    const inner = modal.querySelector('.modal-inner');
+    inner.classList.remove('scale-100', 'opacity-100');
+    inner.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.getElementById('hardwareForm').reset();
+      document.getElementById('hwError').classList.add('hidden');
+    }, 250);
+  }
+
+  document.getElementById('addHardwareBtn').addEventListener('click', openModal);
+  document.getElementById('closeHardwareModal').addEventListener('click', closeModal);
+  document.getElementById('cancelHardwareBtn').addEventListener('click', closeModal);
+  document.getElementById('addHardwareModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('addHardwareModal')) closeModal();
+  });
+
+  // ── Hardware form submit → save to DB ─────────────────────────────────────
+  document.getElementById('hardwareForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const errEl  = document.getElementById('hwError');
+    const subBtn = document.getElementById('hwSubmitBtn');
+    errEl.classList.add('hidden');
+
+    const name   = document.getElementById('hw_name').value.trim();
+    const source = document.getElementById('hw_source').value.trim();
+    const cost   = parseFloat(document.getElementById('hw_cost').value) || 0;
+
+    if (!name) {
+      errEl.textContent = 'Item name is required.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+
+    subBtn.textContent = 'Saving…';
+    subBtn.disabled    = true;
+
+    let newItem = { itemName: name, source, costPerUnit: cost };
+
+    try {
+      // Save to MongoDB inventory with category='hardware'
+      const saved = await window.api.addInventory({
+        itemName:          name,
+        supplier:          source,
+        category:          'hardware',
+        costPerUnit:       cost,
+        stockQty:          1,
+        unit:              'pcs',
+        lowStockThreshold: 0
+      });
+      newItem._id = saved._id || saved.id;
+    } catch (err) {
+      console.warn('Could not save to DB, storing locally only:', err.message);
+    }
+
+    hardwareItems.push(newItem);
+    renderHardware();
+    recalculate();
+    closeModal();
+
+    subBtn.textContent = 'Save Item';
+    subBtn.disabled    = false;
+  });
+
+  // ── PDF export via window.print() ─────────────────────────────────────────
+  document.getElementById('printBtn').addEventListener('click', () => {
+    const ts  = document.getElementById('printTimestamp');
+    const now = new Date();
+    ts.textContent = `Estimate generated on ${now.toLocaleDateString('en-IN', {
+      day: '2-digit', month: 'long', year: 'numeric'
+    })} at ${now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}`;
+
+    // Temporarily switch to light mode so print output is always clean
+    const wasDark = document.documentElement.classList.contains('dark');
+    if (wasDark) document.documentElement.classList.remove('dark');
+
+    setTimeout(() => {
+      window.print();
+      // Restore dark mode after print dialog closes
+      if (wasDark) document.documentElement.classList.add('dark');
+    }, 80);
+  });
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  loadHardware(); // also calls recalculate() after loading
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+/*
+ * LeatherCraft — Global Dark Mode & Theme Overrides
+ * Applied on top of Tailwind when <html class="dark"> is set
+ */
+
+/* ── Smooth transitions on all backgrounds and colors ── */
+body, header, aside, main, nav, section, div, span, a, button, input, select, textarea {
+    transition: background-color 0.3s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* ── Dark mode surface color remapping ── */
+.dark body {
+    background-color: #1b1c1c !important;
+    color: #e4e2e1 !important;
+}
+
+/* Background surfaces */
+.dark .bg-background,
+.dark .bg-surface,
+.dark .bg-surface-bright {
+    background-color: #1b1c1c !important;
+}
+.dark .bg-surface-container-lowest {
+    background-color: #141313 !important;
+}
+.dark .bg-surface-container-low {
+    background-color: #1e1c1b !important;
+}
+.dark .bg-surface-container {
+    background-color: #222020 !important;
+}
+.dark .bg-surface-container-high {
+    background-color: #2c2a29 !important;
+}
+.dark .bg-surface-container-highest {
+    background-color: #333131 !important;
+}
+
+/* Tailwind white overrides */
+.dark .bg-white {
+    background-color: #1e1c1b !important;
+}
+
+/* Text colors */
+.dark .text-on-surface {
+    color: #e4e2e1 !important;
+}
+.dark .text-on-surface-variant {
+    color: #b0978d !important;
+}
+.dark .text-primary {
+    color: #e3beb8 !important;
+}
+.dark .text-on-background {
+    color: #e4e2e1 !important;
+}
+
+/* Border colors */
+.dark .border-outline-variant,
+.dark [class*="border-outline-variant"] {
+    border-color: rgba(74, 55, 48, 0.4) !important;
+}
+.dark .outline-variant {
+    color: #4a3730 !important;
+}
+
+/* Error container in dark mode */
+.dark .bg-error-container\/20 {
+    background-color: rgba(147, 0, 10, 0.15) !important;
+}
+
+/* Primary bg gets slightly lightened in dark for contrast */
+.dark .bg-primary {
+    background-color: #6e524d !important;
+}
+
+/* Cards & stat blocks */
+.dark .hover\:bg-surface-container-low:hover {
+    background-color: #1e1c1b !important;
+}
+.dark .hover\:bg-surface-container-highest:hover {
+    background-color: #333131 !important;
+}
+.dark .hover\:bg-surface-container-high:hover {
+    background-color: #2c2a29 !important;
+}
+
+/* Tables */
+.dark table tr:hover td {
+    background-color: #222020;
+}
+.dark thead tr {
+    background-color: #1e1c1b !important;
+}
+
+/* Inputs and selects */
+.dark input,
+.dark select,
+.dark textarea {
+    background-color: transparent;
+    color: #e4e2e1;
+    border-color: rgba(176, 151, 141, 0.3);
+}
+.dark input::placeholder {
+    color: rgba(176, 151, 141, 0.5);
+}
+.dark input:focus,
+.dark select:focus {
+    border-color: #8c4f10;
+}
+
+/* Force white text on dark primary buttons */
+.dark button.bg-primary,
+.dark .bg-primary.text-on-primary {
+    background-color: #6e524d !important;
+    color: #ffffff !important;
+}
+
+/* Gradient text on dark */
+.dark .from-primary {
+    --tw-gradient-from: #6e524d;
+}
+
+/* Tertiary in dark */
+.dark .text-tertiary {
+    color: #96ccff !important;
+}
+
+/* Secondary stays warm brown in dark */
+.dark .text-secondary {
+    color: #ffb77b !important;
+}
+.dark .bg-secondary\/10 {
+    background-color: rgba(255, 183, 123, 0.1) !important;
+}
+
+/* Error stays red */
+.dark .text-error {
+    color: #ffb4ab !important;
+}
+.dark .bg-error {
+    background-color: #93000a !important;
+}
+.dark .border-error {
+    border-color: #ffb4ab !important;
+}
+.dark .border-l-4.border-error {
+    border-left-color: #ffb4ab !important;
+}
+
+/* Modal overlays */
+.dark #profileModal .bg-surface-container-lowest,
+.dark #addItemModal .bg-surface-container-lowest {
+    background-color: #1e1c1b !important;
+    border: 1px solid rgba(176, 151, 141, 0.15);
+}
+
+/* Green/Red status badges - keep readable */
+.dark .bg-green-100 { background-color: rgba(0, 120, 0, 0.2) !important; }
+.dark .text-green-800 { color: #6ef08a !important; }
+.dark .bg-red-100 { background-color: rgba(147, 0, 10, 0.2) !important; }
+.dark .text-red-800 { color: #ffb4ab !important; }
+
+/* Scrollbar in dark */
+.dark ::-webkit-scrollbar {
+    width: 6px;
+    background: #1b1c1c;
+}
+.dark ::-webkit-scrollbar-thumb {
+    background: #4a3730;
+    border-radius: 3px;
+}
+
+/* ── Light Mode Explicit Overrides (ensure clean state) ── */
+.light body {
+    background-color: #fcf9f8;
+    color: #1b1c1c;
+}
+
+/* ── Role badges ── */
+.role-badge-admin {
+    background: linear-gradient(135deg, #543b36, #6e524d);
+    color: #ecc7c0;
+    font-size: 0.6rem;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+.role-badge-artisan {
+    background: rgba(140, 79, 16, 0.12);
+    color: #8c4f10;
+    font-size: 0.6rem;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* ── Inventory rows ── */
+#inventoryRows .inventory-row {
+    border-bottom: 1px solid rgba(218, 194, 182, 0.12);
+}
+.dark #inventoryRows .inventory-row {
+    border-bottom-color: rgba(74, 55, 48, 0.3);
+}
+
+/* ── Page entry animation ── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+main, .page-content {
+    animation: fadeInUp 0.35s ease both;
+}

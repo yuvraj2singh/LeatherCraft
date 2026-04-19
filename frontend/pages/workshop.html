@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LeatherCraft | Workshop</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-highest": "#e4e2e1",
+          "primary-fixed": "#ffdad4",
+          "on-surface": "#1b1c1c",
+          "primary-container": "#6e524d",
+          "on-primary-container": "#ecc7c0",
+          "tertiary": "#00446c",
+          "on-error": "#ffffff",
+          "tertiary-fixed": "#cee5ff",
+          "surface-container": "#f0eded",
+          "surface-container-low": "#f6f3f2",
+          "secondary-fixed-dim": "#ffb77b",
+          "tertiary-container": "#155c8c",
+          "on-surface-variant": "#54433a",
+          "secondary-container": "#fdad67",
+          "on-tertiary-container": "#a7d3ff",
+          "outline": "#877369",
+          "background": "#fcf9f8",
+          "on-tertiary": "#ffffff",
+          "inverse-on-surface": "#f3f0ef",
+          "on-tertiary-fixed": "#001d32",
+          "on-tertiary-fixed-variant": "#004a75",
+          "surface-dim": "#dcd9d9",
+          "inverse-surface": "#303030",
+          "on-error-container": "#93000a",
+          "error": "#ba1a1a",
+          "primary": "#543b36",
+          "inverse-primary": "#e3beb8",
+          "surface-container-high": "#eae7e7",
+          "on-primary": "#ffffff",
+          "tertiary-fixed-dim": "#96ccff",
+          "outline-variant": "#dac2b6",
+          "on-secondary-container": "#763f00",
+          "on-primary-fixed": "#2b1613",
+          "error-container": "#ffdad6",
+          "surface-tint": "#745853",
+          "secondary-fixed": "#ffdcc2",
+          "on-secondary-fixed-variant": "#6d3a00",
+          "surface": "#fcf9f8",
+          "primary-fixed-dim": "#e3beb8",
+          "on-background": "#1b1c1c",
+          "secondary": "#8c4f10",
+          "on-secondary": "#ffffff",
+          "surface-variant": "#e4e2e1",
+          "on-secondary-fixed": "#2e1500",
+          "surface-container-lowest": "#ffffff",
+          "on-primary-fixed-variant": "#5b403c",
+          "surface-bright": "#fcf9f8"
+        },
+        borderRadius: {
+          DEFAULT: "0.125rem",
+          lg: "0.25rem",
+          xl: "0.5rem",
+          full: "0.75rem"
+        },
+        fontFamily: {
+          headline: ["Noto Serif"],
+          body: ["Manrope"],
+          label: ["Manrope"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  body { font-family: 'Manrope', sans-serif; }
+  h1, h2, h3, .serif { font-family: 'Noto Serif', serif; }
+</style>
+</head>
+
+<!-- FIX: Replaced semantic bg-surface/text-on-surface tokens with explicit dark: variants -->
+<body class="bg-[#fcf9f8] dark:bg-[#1b1c1c] text-[#1b1c1c] dark:text-[#f0eded] transition-colors duration-300">
+
+<!-- TopAppBar -->
+<header class="bg-[#fcf9f8] dark:bg-[#1b1c1c] fixed top-0 w-full z-40 transition-colors duration-300 shadow-[0_4px_20px_rgba(84,59,54,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
+  <div class="flex justify-between items-center w-full px-8 py-4">
+    <div class="font-serif text-2xl font-bold tracking-tighter text-[#543b36] dark:text-[#e3beb8]">LeatherCraft</div>
+    <nav class="hidden md:flex items-center space-x-8">
+      <a class="text-[#8c4f10] dark:text-[#fdad67] font-semibold border-b-2 border-[#8c4f10] dark:border-[#fdad67] pb-1 font-serif italic tracking-tight text-lg" href="./workshop.html">Workshop</a>
+      <a class="text-[#543b36]/70 dark:text-[#e3beb8]/60 hover:text-[#543b36] dark:hover:text-[#e3beb8] font-serif italic tracking-tight text-lg hover:bg-[#f0eded] dark:hover:bg-[#333130] rounded-md transition-all px-2" href="./inventory.html">Inventory</a>
+      <a class="text-[#543b36]/70 dark:text-[#e3beb8]/60 hover:text-[#543b36] dark:hover:text-[#e3beb8] font-serif italic tracking-tight text-lg hover:bg-[#f0eded] dark:hover:bg-[#333130] rounded-md transition-all px-2" href="./archive.html">Archive</a>
+    </nav>
+    <div class="flex items-center space-x-4">
+      <!-- FIX: Dark mode toggle now functional -->
+      <button id="theme-toggle" onclick="toggleDarkMode()" class="p-2 hover:bg-[#f0eded] dark:hover:bg-[#333130] rounded-md transition-all active:scale-95 duration-200">
+        <span id="theme-icon" class="material-symbols-outlined text-[#543b36] dark:text-[#e3beb8]">light_mode</span>
+      </button>
+      <button class="p-2 hover:bg-[#f0eded] dark:hover:bg-[#333130] rounded-md transition-all active:scale-95 duration-200">
+        <span class="material-symbols-outlined text-[#543b36] dark:text-[#e3beb8]">account_circle</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 py-8 space-y-6 bg-gradient-to-b from-[#fcf9f8] to-[#f6f3f2] dark:from-[#1b1c1c] dark:to-[#161616] border-r border-[#dac2b6]/20 dark:border-[#3a2f2b]/30 z-30 pt-24 transition-colors duration-300">
+  <div class="px-6 space-y-1">
+    <div class="font-serif italic text-xl text-[#543b36] dark:text-[#e3beb8]">LeatherCraft</div>
+    <div class="font-sans tracking-wide text-[10px] uppercase text-[#543b36]/60 dark:text-[#e3beb8]/40">Premium Grade</div>
+  </div>
+  <nav class="flex-grow">
+    <ul class="space-y-2">
+      <li>
+        <!-- Active item -->
+        <a class="flex items-center space-x-3 bg-[#fcf9f8] dark:bg-[#2a2220] text-[#8c4f10] dark:text-[#fdad67] rounded-l-full ml-4 pl-4 py-3 shadow-sm font-sans tracking-wide text-sm uppercase transition-all duration-300" href="../index.html">
+          <span class="material-symbols-outlined">architecture</span>
+          <span  >Home</span>
+        </a>
+      </li>
+      <li>
+        <a class="flex items-center space-x-3 text-[#543b36]/60 dark:text-[#e3beb8]/40 hover:pl-6 transition-all font-sans tracking-wide text-sm uppercase hover:text-[#8c4f10] dark:hover:text-[#fdad67] px-8 py-3" href="./inventory.html">
+          <span class="material-symbols-outlined">layers</span>
+          <span>Inventory</span>
+        </a>
+      </li>
+      <li>
+        <a class="flex items-center space-x-3 text-[#543b36]/60 dark:text-[#e3beb8]/40 hover:pl-6 transition-all font-sans tracking-wide text-sm uppercase hover:text-[#8c4f10] dark:hover:text-[#fdad67] px-8 py-3" href="./cost.html">
+          <span class="material-symbols-outlined">payments</span>
+          <span>Cost Estimation</span>
+        </a>
+      </li>
+      <li>
+        <a class="flex items-center space-x-3 text-[#543b36]/60 dark:text-[#e3beb8]/40 hover:pl-6 transition-all font-sans tracking-wide text-sm uppercase hover:text-[#8c4f10] dark:hover:text-[#fdad67] px-8 py-3" href="./archive.html">
+          <span class="material-symbols-outlined">history</span>
+          <span>Archive</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="px-6">
+    <button class="w-full bg-gradient-to-br from-[#543b36] to-[#6e524d] dark:from-[#8c4f10] dark:to-[#6d3a00] text-white py-4 px-4 rounded shadow-lg flex items-center justify-center space-x-2 active:translate-x-1 transition-all duration-300">
+      <span class="material-symbols-outlined">edit_note</span>
+      <span class="font-sans text-xs font-bold uppercase tracking-widest">New Commission</span>
+    </button>
+  </div>
+</aside>
+
+<!-- Main Workspace Canvas -->
+<!-- FIX: Added dark:bg to main -->
+<main class="md:ml-64 pt-24 pb-24 md:pb-8 min-h-screen bg-[#fcf9f8] dark:bg-[#1b1c1c] transition-colors duration-300">
+  <div class="px-6 lg:px-12 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- Center Section: 3D Simulator -->
+      <div class="lg:col-span-8 space-y-8">
+        <header class="flex items-end justify-between border-b-0">
+          <div>
+            <h2 class="text-3xl font-serif italic text-[#543b36] dark:text-[#e3beb8]">Simulation Canvas</h2>
+            <p class="text-[#54433a] dark:text-[#a89388] font-body text-sm mt-1">Real-time light and texture mapping for artisan hides.</p>
+          </div>
+          <div class="flex space-x-2">
+            <span class="bg-[#8c4f10]/10 dark:bg-[#fdad67]/10 text-[#8c4f10] dark:text-[#fdad67] px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">PBR Rendering</span>
+          </div>
+        </header>
+
+        <!-- 3D Viewport -->
+        <div class="relative aspect-[16/10] bg-[#f6f3f2] dark:bg-[#1f1c1b] rounded-xl overflow-hidden group shadow-[0_12px_40px_rgba(84,59,54,0.08)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.4)] transition-colors duration-300">
+          <img class="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal opacity-90 transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcF_OGP7UlWbmUWeaFlq001xXDvHnsnH3hB1IjDJwX4Idm7Mso8dNdDFstuytbCCMofqHStIvdj_96JFIQu2vMRKdUKJjIt45cm9BqN2Neuwoh8ua3bGbC_voEWBVKrsmfwdXysvZd3U0NJF66_WCbYGZZacVNrVGLxl9xh_GEY-INUCaq8pmC5fYiFQJUaIKiFYVsSyoSDtRjaLQg92ST9aadoLGFV8bLGLZGvHTK222q0y1MaYCg9HIfXOvrHAcTMbrlCsm8pz6K" alt="Full-grain leather texture"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-[#543b36]/30 dark:from-[#1b1c1c]/60 to-transparent"></div>
+
+          <!-- FIX: Floating controls — added dark:bg variants -->
+          <div class="absolute top-6 right-6 flex flex-col space-y-3">
+            <button class="bg-white/80 dark:bg-[#262423]/80 backdrop-blur-md p-3 rounded-full text-[#543b36] dark:text-[#e3beb8] shadow-lg hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined">rotate_right</span>
+            </button>
+            <button class="bg-white/80 dark:bg-[#262423]/80 backdrop-blur-md p-3 rounded-full text-[#543b36] dark:text-[#e3beb8] shadow-lg hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined">zoom_in</span>
+            </button>
+            <button class="bg-white/80 dark:bg-[#262423]/80 backdrop-blur-md p-3 rounded-full text-[#543b36] dark:text-[#e3beb8] shadow-lg hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined">lightbulb</span>
+            </button>
+          </div>
+
+          <!-- FIX: Info overlay — added dark:bg and dark text variants -->
+          <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+            <div class="bg-white/90 dark:bg-[#262423]/90 backdrop-blur-sm p-4 rounded-lg shadow-sm border-b-2 border-[#8c4f10] dark:border-[#fdad67]">
+              <div class="text-[10px] font-bold uppercase tracking-widest text-[#8c4f10] dark:text-[#fdad67] mb-1">Active Selection</div>
+              <div class="font-serif italic text-xl text-[#543b36] dark:text-[#e3beb8]">Tuscan Full-Grain</div>
+              <div class="text-xs text-[#54433a] dark:text-[#a89388] font-medium mt-1">Weight: 4.5oz • Finish: Semi-Aniline</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Material Details Grid -->
+        <!-- FIX: Cards use explicit dark:bg, dark text, dark progress track -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white dark:bg-[#262423] p-6 rounded-xl space-y-4 shadow-sm dark:shadow-[0_2px_12px_rgba(0,0,0,0.3)] transition-colors duration-300">
+            <span class="material-symbols-outlined text-[#8c4f10] dark:text-[#fdad67]">texture</span>
+            <h3 class="font-serif text-lg text-[#543b36] dark:text-[#e3beb8]">Grain Density</h3>
+            <!-- FIX: Progress track dark variant -->
+            <div class="w-full bg-[#e4e2e1] dark:bg-[#3a2f2b] h-1 rounded-full overflow-hidden">
+              <div class="bg-[#8c4f10] dark:bg-[#fdad67] h-full w-[72%]"></div>
+            </div>
+            <div class="flex justify-between text-[10px] font-bold uppercase tracking-tighter text-[#54433a]/60 dark:text-[#a89388]/60">
+              <span>Refined</span>
+              <span>Coarse</span>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-[#262423] p-6 rounded-xl space-y-4 shadow-sm dark:shadow-[0_2px_12px_rgba(0,0,0,0.3)] transition-colors duration-300">
+            <span class="material-symbols-outlined text-[#8c4f10] dark:text-[#fdad67]">opacity</span>
+            <h3 class="font-serif text-lg text-[#543b36] dark:text-[#e3beb8]">Oil Absorption</h3>
+            <div class="w-full bg-[#e4e2e1] dark:bg-[#3a2f2b] h-1 rounded-full overflow-hidden">
+              <div class="bg-[#8c4f10] dark:bg-[#fdad67] h-full w-[45%]"></div>
+            </div>
+            <div class="flex justify-between text-[10px] font-bold uppercase tracking-tighter text-[#54433a]/60 dark:text-[#a89388]/60">
+              <span>Dry</span>
+              <span>Waxy</span>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-[#262423] p-6 rounded-xl space-y-4 shadow-sm dark:shadow-[0_2px_12px_rgba(0,0,0,0.3)] transition-colors duration-300">
+            <span class="material-symbols-outlined text-[#8c4f10] dark:text-[#fdad67]">straighten</span>
+            <h3 class="font-serif text-lg text-[#543b36] dark:text-[#e3beb8]">Thickness</h3>
+            <div class="w-full bg-[#e4e2e1] dark:bg-[#3a2f2b] h-1 rounded-full overflow-hidden">
+              <div class="bg-[#8c4f10] dark:bg-[#fdad67] h-full w-[88%]"></div>
+            </div>
+            <div class="flex justify-between text-[10px] font-bold uppercase tracking-tighter text-[#54433a]/60 dark:text-[#a89388]/60">
+              <span>1.2mm</span>
+              <span>4.0mm</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Section: Configuration Panels -->
+      <aside class="lg:col-span-4 space-y-8">
+
+        <!-- Leather Variant Selection -->
+        <section class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="font-sans text-xs font-bold uppercase tracking-widest text-[#543b36] dark:text-[#e3beb8]">Leather Variant</h4>
+            <span class="text-[#00446c] dark:text-[#96ccff] text-xs font-medium">32 Options</span>
+          </div>
+          <div class="grid grid-cols-1 gap-3">
+            <!-- Active variant -->
+            <!-- FIX: Added dark:bg, dark text, dark border -->
+            <button class="flex items-center justify-between p-4 bg-white dark:bg-[#262423] rounded-xl border-b-2 border-[#8c4f10] dark:border-[#fdad67] group transition-all shadow-sm dark:shadow-[0_2px_12px_rgba(0,0,0,0.3)]">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-[#eae7e7] dark:bg-[#1f1c1b] rounded flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[#543b36] dark:text-[#e3beb8]">inventory_2</span>
+                </div>
+                <div class="text-left">
+                  <p class="font-serif text-base text-[#543b36] dark:text-[#e3beb8]">Full Grain</p>
+                  <p class="text-[10px] font-medium text-[#54433a] dark:text-[#a89388] uppercase">Unaltered Surface</p>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-[#8c4f10] dark:text-[#fdad67]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+            </button>
+            <!-- FIX: Inactive variants with dark:bg and dark hover -->
+            <button class="flex items-center justify-between p-4 bg-[#f6f3f2] dark:bg-[#1f1c1b] rounded-xl hover:bg-[#eae7e7] dark:hover:bg-[#2a2220] transition-all">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-[#eae7e7] dark:bg-[#262423] rounded flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[#543b36]/40 dark:text-[#e3beb8]/30">inventory_2</span>
+                </div>
+                <div class="text-left">
+                  <p class="font-serif text-base text-[#543b36]/70 dark:text-[#e3beb8]/60">Top Grain</p>
+                  <p class="text-[10px] font-medium text-[#54433a] dark:text-[#a89388] uppercase">Sanded &amp; Refined</p>
+                </div>
+              </div>
+            </button>
+            <button class="flex items-center justify-between p-4 bg-[#f6f3f2] dark:bg-[#1f1c1b] rounded-xl hover:bg-[#eae7e7] dark:hover:bg-[#2a2220] transition-all">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-[#eae7e7] dark:bg-[#262423] rounded flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[#543b36]/40 dark:text-[#e3beb8]/30">inventory_2</span>
+                </div>
+                <div class="text-left">
+                  <p class="font-serif text-base text-[#543b36]/70 dark:text-[#e3beb8]/60">Suede</p>
+                  <p class="text-[10px] font-medium text-[#54433a] dark:text-[#a89388] uppercase">Napped Underside</p>
+                </div>
+              </div>
+            </button>
+          </div>
+        </section>
+
+        <!-- Tannery Palette -->
+        <!-- FIX: Added dark:bg to container, fixed border-surface → explicit dark variant -->
+        <section class="space-y-4">
+          <h4 class="font-sans text-xs font-bold uppercase tracking-widest text-[#543b36] dark:text-[#e3beb8]">Tannery Palette</h4>
+          <div class="grid grid-cols-4 gap-4 p-4 bg-white dark:bg-[#262423] rounded-xl shadow-sm dark:shadow-[0_2px_12px_rgba(0,0,0,0.3)] transition-colors duration-300">
+            <!-- FIX: border-surface → border-[#fcf9f8] dark:border-[#262423] so swatches look clean on both themes -->
+            <button class="aspect-square rounded-full bg-[#543b36] border-4 border-[#fcf9f8] dark:border-[#262423] shadow-sm ring-2 ring-[#8c4f10] dark:ring-[#fdad67] ring-offset-2 ring-offset-white dark:ring-offset-[#262423]"></button>
+            <button class="aspect-square rounded-full bg-[#8c4f10] border-4 border-[#fcf9f8] dark:border-[#262423] shadow-sm hover:ring-2 hover:ring-[#8c4f10] dark:hover:ring-[#fdad67] hover:ring-offset-2 transition-all"></button>
+            <button class="aspect-square rounded-full bg-[#2b1613] border-4 border-[#fcf9f8] dark:border-[#262423] shadow-sm hover:ring-2 hover:ring-[#8c4f10] dark:hover:ring-[#fdad67] hover:ring-offset-2 transition-all"></button>
+            <button class="aspect-square rounded-full bg-[#d2b48c] border-4 border-[#fcf9f8] dark:border-[#262423] shadow-sm hover:ring-2 hover:ring-[#8c4f10] dark:hover:ring-[#fdad67] hover:ring-offset-2 transition-all"></button>
+            <button class="aspect-square rounded-full bg-[#1b1c1c] border-4 border-[#fcf9f8] dark:border-[#262423] shadow-sm hover:ring-2 hover:ring-[#8c4f10] dark:hover:ring-[#fdad67] hover:ring-offset-2 transition-all"></button>
+            <button class="aspect-square rounded-full bg-[#4a3728] border-4 border-[#fcf9f8] dark:border-[#262423] shadow-sm hover:ring-2 hover:ring-[#8c4f10] dark:hover:ring-[#fdad67] hover:ring-offset-2 transition-all"></button>
+            <button class="aspect-square rounded-full bg-[#a0522d] border-4 border-[#fcf9f8] dark:border-[#262423] shadow-sm hover:ring-2 hover:ring-[#8c4f10] dark:hover:ring-[#fdad67] hover:ring-offset-2 transition-all"></button>
+            <button class="aspect-square rounded-full bg-[#bc8f8f] border-4 border-[#fcf9f8] dark:border-[#262423] shadow-sm hover:ring-2 hover:ring-[#8c4f10] dark:hover:ring-[#fdad67] hover:ring-offset-2 transition-all"></button>
+          </div>
+        </section>
+
+        <!-- Hardware Accents -->
+        <!-- FIX: Added dark:bg, dark text to hardware options -->
+        <section class="space-y-4">
+          <h4 class="font-sans text-xs font-bold uppercase tracking-widest text-[#543b36] dark:text-[#e3beb8]">Hardware Accents</h4>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-[#f6f3f2] dark:bg-[#1f1c1b] p-4 rounded-xl flex items-center space-x-3 cursor-pointer hover:bg-[#eae7e7] dark:hover:bg-[#2a2220] transition-colors">
+              <div class="w-4 h-4 rounded-full bg-[#ffd700] ring-1 ring-[#543b36]/10 dark:ring-[#e3beb8]/10 flex-shrink-0"></div>
+              <span class="font-body text-sm font-medium text-[#543b36] dark:text-[#e3beb8]">Antique Brass</span>
+            </div>
+            <!-- Active hardware -->
+            <div class="bg-white dark:bg-[#262423] p-4 rounded-xl flex items-center space-x-3 cursor-pointer border-b-2 border-[#8c4f10] dark:border-[#fdad67] shadow-sm dark:shadow-[0_2px_12px_rgba(0,0,0,0.3)] transition-colors">
+              <div class="w-4 h-4 rounded-full bg-[#c0c0c0] ring-1 ring-[#543b36]/10 dark:ring-[#e3beb8]/10 flex-shrink-0"></div>
+              <span class="font-body text-sm font-semibold text-[#543b36] dark:text-[#e3beb8]">Brushed Nickel</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Export/Summary Card — intentionally always dark, no changes needed -->
+        <div class="bg-[#543b36] p-6 rounded-xl text-white space-y-6 shadow-xl">
+          <div class="space-y-1">
+            <p class="font-sans text-[10px] font-bold uppercase tracking-[0.2em] opacity-70">Configuration Summary</p>
+            <p class="font-serif text-xl">The Heritage Briefcase</p>
+          </div>
+          <ul class="space-y-2 opacity-90 font-body text-sm">
+            <li class="flex justify-between border-b border-white/10 pb-2">
+              <span>Main Body</span>
+              <span class="font-bold">Full Grain Umber</span>
+            </li>
+            <li class="flex justify-between border-b border-white/10 pb-2">
+              <span>Hardware</span>
+              <span class="font-bold">Brushed Nickel</span>
+            </li>
+            <li class="flex justify-between">
+              <span>Estimate</span>
+              <span class="font-bold text-[#ffdcc2]">$845.00</span>
+            </li>
+          </ul>
+          <button class="w-full bg-[#fdad67] text-[#2e1500] font-sans font-bold uppercase tracking-widest text-xs py-4 rounded hover:bg-[#ffdcc2] transition-colors active:scale-95 duration-200">
+            Render High-Res Blueprint
+          </button>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- BottomNavBar (Mobile Only) -->
+<!-- FIX: Added dark: variants for bg, border, text -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full h-20 flex justify-around items-center px-6 pb-safe bg-[#fcf9f8]/95 dark:bg-[#1b1c1c]/95 backdrop-blur-md z-50 rounded-t-3xl shadow-[0_-8px_30px_rgba(84,59,54,0.1)] dark:shadow-[0_-8px_30px_rgba(0,0,0,0.4)] border-t border-[#dac2b6]/20 dark:border-[#3a2f2b]/40 transition-colors duration-300">
+  <!-- Active -->
+  <a class="flex flex-col items-center justify-center text-[#8c4f10] dark:text-[#fdad67] bg-[#8c4f10]/5 dark:bg-[#fdad67]/10 rounded-xl px-4 py-1 font-sans text-[10px] font-medium tracking-widest uppercase" href="../index.html">
+    <span class="material-symbols-outlined">home_app_logo</span>
+    <span>Home</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#e3beb8]/40 hover:text-[#543b36] dark:hover:text-[#e3beb8] font-sans text-[10px] font-medium tracking-widest uppercase" href="./workshop.html">
+    <span class="material-symbols-outlined">construction</span>
+    <span>Tools</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#e3beb8]/40 hover:text-[#543b36] dark:hover:text-[#e3beb8] font-sans text-[10px] font-medium tracking-widest uppercase" href="./inventory.html">
+    <span class="material-symbols-outlined">layers</span>
+    <span>Inventory</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#e3beb8]/40 hover:text-[#543b36] dark:hover:text-[#e3beb8] font-sans text-[10px] font-medium tracking-widest uppercase" href="./profile.html">
+    <span class="material-symbols-outlined">person</span>
+    <span>Me</span>
+  </a>
+</nav>
+
+<!-- FIX: Functional dark mode toggle with localStorage persistence -->
+<script>
+  function toggleDarkMode() {
+    const html = document.documentElement;
+    const icon = document.getElementById('theme-icon');
+    const isDark = html.classList.toggle('dark');
+    html.classList.toggle('light', !isDark);
+    icon.textContent = isDark ? 'dark_mode' : 'light_mode';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }
+
+  // On load: restore saved preference or respect OS setting
+  (function () {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const icon = document.getElementById('theme-icon');
+    if (saved === 'dark' || (!saved && prefersDark)) {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+      if (icon) icon.textContent = 'dark_mode';
+    }
+  })();
+</script>
+
+</body>
+</html>

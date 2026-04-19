@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Project Archive | LeatherCraft</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="../css/theme.css" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-highest": "#e4e2e1","primary-fixed": "#ffdad4","on-surface": "#1b1c1c",
+          "primary-container": "#6e524d","on-primary-container": "#ecc7c0","tertiary": "#00446c",
+          "on-error": "#ffffff","surface-container": "#f0eded","surface-container-low": "#f6f3f2",
+          "secondary-fixed-dim": "#ffb77b","tertiary-container": "#155c8c","on-surface-variant": "#54433a",
+          "secondary-container": "#fdad67","on-secondary-container": "#763f00","outline": "#877369",
+          "background": "#fcf9f8","on-tertiary": "#ffffff","surface-dim": "#dcd9d9",
+          "inverse-surface": "#303030","on-error-container": "#93000a","error": "#ba1a1a",
+          "primary": "#543b36","inverse-primary": "#e3beb8","surface-container-high": "#eae7e7",
+          "on-primary": "#ffffff","outline-variant": "#dac2b6","on-secondary-container": "#763f00",
+          "on-primary-fixed": "#2b1613","error-container": "#ffdad6","surface-tint": "#745853",
+          "secondary-fixed": "#ffdcc2","surface": "#fcf9f8","primary-fixed-dim": "#e3beb8",
+          "on-background": "#1b1c1c","secondary": "#8c4f10","on-secondary": "#ffffff",
+          "surface-variant": "#e4e2e1","surface-container-lowest": "#ffffff","surface-bright": "#fcf9f8"
+        },
+        borderRadius: { DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem" },
+        fontFamily: { headline: ["Noto Serif"], body: ["Manrope"], label: ["Manrope"] }
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: 'Manrope', sans-serif; }
+  h1,h2,h3 { font-family: 'Noto Serif', serif; }
+  .font-serif { font-family: 'Noto Serif', serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  @keyframes shimmer {
+    0% { background-position: -800px 0; }
+    100% { background-position: 800px 0; }
+  }
+  .skeleton {
+    background: linear-gradient(90deg, #f0eded 25%, #e4e2e1 50%, #f0eded 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 0.5rem;
+  }
+  .dark .skeleton {
+    background: linear-gradient(90deg, #222020 25%, #2c2a29 50%, #222020 75%);
+    background-size: 800px 100%;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .fade-up { animation: fadeUp 0.35s ease both; }
+
+  /* Filter tab active state */
+  .filter-tab.active {
+    background: #e4e2e1;
+    color: #543b36;
+    font-weight: 700;
+  }
+  .dark .filter-tab.active {
+    background: #333130;
+    color: #fcf9f8;
+  }
+
+  /* Card image: shorter on mobile */
+  .project-image-wrap { aspect-ratio: 4/3; }
+  @media (min-width: 640px) { .project-image-wrap { aspect-ratio: 4/5; } }
+</style>
+</head>
+<body class="bg-background text-on-surface selection:bg-secondary-fixed selection:text-on-secondary-fixed min-h-screen">
+
+<!-- ─── TopAppBar ─────────────────────────────────────────────────────────── -->
+<header class="bg-[#fcf9f8] dark:bg-[#1b1c1c] docked full-width top-0 z-50 transition-colors duration-300 shadow-[0_4px_20px_rgba(84,59,54,0.05)] sticky">
+  <div class="flex justify-between items-center w-full px-8 py-4">
+    <div class="flex items-center gap-8">
+      <span class="font-serif text-2xl font-bold tracking-tighter text-[#543b36] dark:text-[#fcf9f8]">LeatherCraft</span>
+      <nav class="hidden md:flex space-x-6">
+        <a class="font-serif italic tracking-tight text-lg text-[#543b36]/70 dark:text-[#fcf9f8]/60 hover:text-[#543b36] dark:hover:text-[#fcf9f8] transition-all" href="../index.html">Workshop</a>
+        <a class="font-serif italic tracking-tight text-lg text-[#543b36]/70 dark:text-[#fcf9f8]/60 hover:text-[#543b36] dark:hover:text-[#fcf9f8] transition-all" href="inventory.html">Inventory</a>
+        <a class="font-serif italic tracking-tight text-lg text-[#8c4f10] dark:text-[#ffb77b] font-semibold border-b-2 border-[#8c4f10] dark:border-[#ffb77b] pb-1" href="archive.html">Journal</a>
+      </nav>
+    </div>
+    <div class="flex items-center space-x-4">
+      <button class="material-symbols-outlined p-2 text-[#543b36] dark:text-[#dac2b6] hover:bg-[#f0eded] dark:hover:bg-[#333130] rounded-md transition-all active:scale-95">light_mode</button>
+      <button class="material-symbols-outlined p-2 text-[#543b36] dark:text-[#dac2b6] hover:bg-[#f0eded] dark:hover:bg-[#333130] rounded-md transition-all active:scale-95">account_circle</button>
+    </div>
+  </div>
+</header>
+
+<div class="flex min-h-screen">
+
+<!-- ─── SideNavBar ─────────────────────────────────────────────────────────── -->
+<aside class="hidden md:flex flex-col w-64 shrink-0 sticky top-[73px] h-[calc(100vh-73px)] self-start bg-gradient-to-b from-[#fcf9f8] to-[#f6f3f2] dark:from-[#1b1c1c] dark:to-[#161616] py-8 space-y-6 overflow-y-auto">
+  <div class="px-6 mb-4">
+    <h2 class="font-serif italic text-xl text-[#543b36] dark:text-[#fcf9f8]">LeatherCraft</h2>
+    <p class="font-sans tracking-wide text-[10px] uppercase text-[#543b36]/60 dark:text-[#fcf9f8]/40">Premium Grade</p>
+  </div>
+  <nav class="flex-grow">
+    <ul class="space-y-2">
+      <li>
+        <a class="flex items-center space-x-3 text-[#543b36]/60 dark:text-[#fcf9f8]/40 hover:pl-6 transition-all font-sans tracking-wide text-sm uppercase py-3 ml-4 pl-4" href="../index.html">
+          <span class="material-symbols-outlined">architecture</span><span  >Home</span>
+        </a>
+      </li>
+      <li>
+        <a class="flex items-center space-x-3 text-[#543b36]/60 dark:text-[#fcf9f8]/40 hover:pl-6 transition-all font-sans tracking-wide text-sm uppercase py-3 ml-4 pl-4" href="inventory.html">
+          <span class="material-symbols-outlined">layers</span><span>Materials</span>
+        </a>
+      </li>
+      <li>
+        <a class="flex items-center space-x-3 text-[#543b36]/60 dark:text-[#fcf9f8]/40 hover:pl-6 transition-all font-sans tracking-wide text-sm uppercase py-3 ml-4 pl-4" href="cost.html">
+          <span class="material-symbols-outlined">payments</span><span>Ledger</span>
+        </a>
+      </li>
+      <li>
+        <a class="flex items-center space-x-3 bg-[#fcf9f8] dark:bg-[#262423] text-[#8c4f10] dark:text-[#ffb77b] rounded-l-full ml-4 pl-4 py-3 shadow-sm font-sans tracking-wide text-sm uppercase" href="archive.html">
+          <span class="material-symbols-outlined">history</span><span>Archive</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="px-6 pt-4">
+    <!-- Admin: Add Project button -->
+    <button id="addProjectBtn" class="hidden w-full py-3 mb-3 bg-gradient-to-br from-secondary to-secondary-container text-on-secondary rounded-xl font-bold text-xs uppercase tracking-widest shadow hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-sm">add</span> Add Project
+    </button>
+    <button onclick="window.location.href='../index.html'" class="w-full py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-xl font-bold text-sm uppercase tracking-widest shadow-lg hover:brightness-110 active:scale-95 transition-all">
+      New Commission
+    </button>
+  </div>
+</aside>
+
+<!-- ─── Main Content ───────────────────────────────────────────────────────── -->
+<main class="flex-1 pt-8 pb-32 px-4 sm:px-8 md:px-12">
+
+  <!-- Editorial Header -->
+  <header class="mb-10">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div>
+        <span class="text-secondary font-bold tracking-[0.2em] text-xs uppercase mb-2 block">Curation</span>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tighter text-primary leading-none">Project Archive</h1>
+        <p class="text-on-surface-variant max-w-md mt-4 text-base md:text-lg font-body">A digital ledger of finished leathergoods, technical patterns, and workshop journals.</p>
+      </div>
+      <!-- Filter Tabs -->
+      <div class="flex gap-2 flex-wrap no-scrollbar" id="filterTabs">
+        <button data-cat="All" class="filter-tab active whitespace-nowrap px-5 py-2 rounded-full text-sm transition-colors">All Articles</button>
+        <button data-cat="Bags"    class="filter-tab whitespace-nowrap px-5 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-full text-sm transition-colors">Bags</button>
+        <button data-cat="Wallets" class="filter-tab whitespace-nowrap px-5 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-full text-sm transition-colors">Wallets</button>
+        <button data-cat="Folios"  class="filter-tab whitespace-nowrap px-5 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-full text-sm transition-colors">Folios</button>
+        <button data-cat="Belts"   class="filter-tab whitespace-nowrap px-5 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-full text-sm transition-colors">Belts</button>
+        <button data-cat="Other"   class="filter-tab whitespace-nowrap px-5 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-full text-sm transition-colors">Other</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Status line -->
+  <p id="archiveStatus" class="text-xs text-on-surface-variant mb-6 font-medium"></p>
+
+  <!-- Gallery Grid -->
+  <div id="projectsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
+    <!-- Skeleton loaders -->
+    <div class="skeleton h-80 w-full rounded-xl"></div>
+    <div class="skeleton h-80 w-full rounded-xl"></div>
+    <div class="skeleton h-80 w-full rounded-xl sm:block hidden"></div>
+  </div>
+
+  <!-- Empty state -->
+  <div id="emptyState" class="hidden text-center py-24 space-y-4">
+    <span class="material-symbols-outlined text-5xl text-on-surface-variant/30">inventory_2</span>
+    <p class="text-on-surface-variant font-medium">No projects found</p>
+    <p class="text-xs text-on-surface-variant/60">Try a different filter or add a new project as Admin</p>
+  </div>
+
+  <!-- Pagination -->
+  <footer id="paginationFooter" class="hidden mt-16 pt-10 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-6">
+    <p id="paginationLabel" class="text-on-surface-variant/60 font-body italic text-sm"></p>
+    <div id="paginationBtns" class="flex gap-2 flex-wrap justify-center"></div>
+  </footer>
+
+</main>
+</div><!-- end flex -->
+
+<!-- ─── BottomNavBar (Mobile) ─────────────────────────────────────────────── -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full h-20 flex justify-around items-center px-6 pb-safe bg-[#fcf9f8]/95 dark:bg-[#1b1c1c]/95 backdrop-blur-md z-[100] border-t border-[#dac2b6]/20 shadow-[0_-8px_30px_rgba(84,59,54,0.1)]">
+  <a class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#fcf9f8]/40 transition-transform active:scale-90" href="../index.html">
+    <span class="material-symbols-outlined">home_app_logo</span>
+    <span class="font-sans text-[10px] font-medium tracking-widest uppercase">Home</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#fcf9f8]/40 transition-transform active:scale-90" href="inventory.html">
+    <span class="material-symbols-outlined">layers</span>
+    <span class="font-sans text-[10px] font-medium tracking-widest uppercase">Vault</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#8c4f10] bg-[#8c4f10]/5 rounded-xl px-4 py-1 active:scale-90" href="archive.html">
+    <span class="material-symbols-outlined">history</span>
+    <span class="font-sans text-[10px] font-medium tracking-widest uppercase">Archive</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#fcf9f8]/40 transition-transform active:scale-90" href="profile.html">
+    <span class="material-symbols-outlined">person</span>
+    <span class="font-sans text-[10px] font-medium tracking-widest uppercase">Me</span>
+  </a>
+</nav>
+
+<!-- ─── Add / Edit Project Modal (Admin) ──────────────────────────────────── -->
+<div id="projectModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[200]">
+  <div class="bg-surface-container-lowest rounded-xl shadow-2xl w-full max-w-md p-8 transform transition-all duration-300 scale-95 opacity-0" id="projectModalInner">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 id="modalTitle" class="font-serif text-2xl font-bold text-primary">Add Project</h2>
+        <p class="text-xs text-on-surface-variant mt-1 uppercase tracking-widest">Archive entry</p>
+      </div>
+      <button id="closeProjectModal" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">close</button>
+    </div>
+    <form id="projectForm" class="space-y-5">
+      <input type="hidden" id="editProjectId"/>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Title *</label>
+        <input id="pTitle" type="text" required placeholder="e.g. Heritage Tote Vol. II"
+          class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm"/>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Category</label>
+          <select id="pCategory" class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm">
+            <option value="Bags">Bags</option>
+            <option value="Wallets">Wallets</option>
+            <option value="Folios">Folios</option>
+            <option value="Belts">Belts</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Status</label>
+          <select id="pStatus" class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm">
+            <option value="Completed">Completed</option>
+            <option value="Archived">Archived</option>
+            <option value="Commissioned">Commissioned</option>
+            <option value="In Progress">In Progress</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Material / Leather</label>
+        <select id="pMaterial" class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm">
+          <option value="">— Select material —</option>
+          <option value="Veg-Tan Leather">Veg-Tan Leather</option>
+          <option value="Chrome-Tan Leather">Chrome-Tan Leather</option>
+          <option value="Bridle Leather">Bridle Leather</option>
+          <option value="Horween Chromexcel">Horween Chromexcel</option>
+          <option value="Shell Cordovan">Shell Cordovan</option>
+          <option value="Pull-Up Leather">Pull-Up Leather</option>
+          <option value="Box Calf">Box Calf</option>
+          <option value="Suede">Suede</option>
+          <option value="Nubuck">Nubuck</option>
+          <option value="Saffiano Leather">Saffiano Leather</option>
+          <option value="Pebbled Leather">Pebbled Leather</option>
+          <option value="Waxed Canvas">Waxed Canvas</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Image URL</label>
+        <input id="pImageUrl" type="url" placeholder="https://..."
+          class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm"/>
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Notes</label>
+        <textarea id="pNotes" rows="2" placeholder="Short description..."
+          class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm resize-none"></textarea>
+      </div>
+      <p id="projectMsg" class="text-xs text-center hidden"></p>
+      <div class="flex gap-4 pt-2">
+        <button type="button" id="cancelProjectModal" class="flex-1 py-3 border border-outline-variant text-on-surface-variant font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-surface-container transition-all">Cancel</button>
+        <button type="submit" id="projectSubmitBtn" class="flex-1 py-3 bg-primary text-on-primary font-bold text-xs uppercase tracking-widest rounded-lg hover:opacity-90 active:scale-95 transition-all">Save Project</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../js/api.js"></script>
+<script src="../js/theme.js"></script>
+<script>
+// ── Constants ──────────────────────────────────────────────────────────────
+const ITEMS_PER_PAGE = 6;
+const STATUS_COLORS  = {
+  'Completed':   'bg-green-100 text-green-800',
+  'Archived':    'bg-surface-container-highest text-on-surface-variant',
+  'Commissioned':'bg-secondary/10 text-secondary',
+  'In Progress': 'bg-primary/10 text-primary'
+};
+const FALLBACK_IMAGES = {
+  Bags:    'https://lh3.googleusercontent.com/aida-public/AB6AXuARDTNhVAGdOTM0pB0Y8JRve9VDbdFXgV-oqR0V-LYJtjy-8kwLqct2tchLWxDMPRvPHYZHIv_YI_nSBqkbn4GohO-ZReK80WuKe4grvUuS3oVp-Gi_Z9GRlBHnsKYQgeEsc3R8wB9KUD_2WhtGZykc8Vhz-90GZElcMWxFSimlnrLLp-GRlHP1v2GMe5ei5-duCJ0WHJTwwh0mB_I-5R7xase_o4pA04xxAT9DDkQXFDUX2kp6V7L3Hn5a6rpLfALcLl5iIfZEjUwJ',
+  Wallets: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCscf3iDWUEWspheK1V4ini46C6LxUMHit2QOLQn3k4E4Dl5Wr853OG2Ep0eZgi4Dy6zIz8YV9qtMYzFwaNp1reJ1fO7swSKRMEoO_ki0hs-AA5L9zpDKnnY6q3Mfmjl64hKjB6oUSfjPwMWyJ1SeJZlhoOxgULy4YN2ITyb_5ltKeyB9TYIPtZPjPlWt2G92E2qgOQqDBJU7r07qXji_nBOSzpyUVb_mJfFyoDK3BDPSWKO9g26eKHiuVmdX8_dAyCyWAS84P5vC-g',
+  Folios:  'https://lh3.googleusercontent.com/aida-public/AB6AXuAbR61VB4u0KZFpmn2trPSNI7GW8kG06lr5EN3wCB1CfANKa8sc8XgVlffcPVDx4VXY_f2ior8uIszD3TLLCVYLedvkzIrjb0hWLhaw1XJTtNSD3l-VhIBSTrMhnVO3pgzaT5IHfYwGdKBLuTv5u81It4h2cm0KY1TNDtGflgsxP3NnRlOcBmHpN19XGdVb',
+  Belts:   'https://lh3.googleusercontent.com/aida-public/AB6AXuDhQ8QJUxIRc7sisUXx-HltUKfKhfD75Fnn52UVze41kc8wroUF8OMEtYvSSTfoKSDedtvxmErMH-ShZG056Lr6yRwGyJgK1ylV4C9Y_z7Wp683DdrepJN1TJpKxrTQrwvfs0ChVPy9XHsHSPpxozeeHiLmpDPd36U9XtO2Odfzd91EgjyjV8OOO05wriCpBWOOH4H6pU_1YSVg3TWMOCKoBl8ErTaDy9QO0AwxXGTMg_MXdaQQ_s2jeGsP7UTSbiG1-8yY3FxaYZ0g',
+  Other:   'https://lh3.googleusercontent.com/aida-public/AB6AXuAqC3fv2e8XCKVaeVuJR48B0WANoUif0RRwp4-6lvQNeOM52WH9wfVuUE0JBnx_FfC8lhnr2JAFEm1vskxEFam9Q3ugBq8EfJELwAMuRelkoPFv7o0wQAWlJecbm8kom1msM-3uigXx0fTl8Pb1CX7KnAe2_VRHTxpH1kvZEwrnh2uqSBz7LF-TwXidIU6x7hF1JPARQl1_aFer66ezvfmc9nJS1krTPHHo0nIHHXhxv3oHV6mkP6p072hibMqZtlWpTlA5a-xptfqg'
+};
+
+// ── State ──────────────────────────────────────────────────────────────────
+let currentPage = 1;
+let currentCategory = 'All';
+let totalPages = 1;
+let totalItems = 0;
+let isAdmin = false;
+let editingId = null;
+
+// ── Auth & Init ────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!window.requireAuth()) return;
+  const user = window.getCurrentUser();
+  isAdmin = user && user.role === 'Admin';
+  if (isAdmin) document.getElementById('addProjectBtn').classList.remove('hidden');
+
+  await loadProjects();
+  wireFilterTabs();
+  wireModal();
+});
+
+// ── Load Projects from DB ──────────────────────────────────────────────────
+async function loadProjects() {
+  const grid   = document.getElementById('projectsGrid');
+  const empty  = document.getElementById('emptyState');
+  const footer = document.getElementById('paginationFooter');
+  const status = document.getElementById('archiveStatus');
+
+  // Show skeletons
+  grid.innerHTML = `
+    <div class="skeleton h-80 w-full rounded-xl"></div>
+    <div class="skeleton h-80 w-full rounded-xl"></div>
+    <div class="skeleton h-80 w-full rounded-xl sm:block hidden"></div>`;
+  empty.classList.add('hidden');
+  footer.classList.add('hidden');
+
+  try {
+    const params = { page: currentPage, limit: ITEMS_PER_PAGE };
+    if (currentCategory !== 'All') params.category = currentCategory;
+
+    const data = await window.api.getProjects(params);
+    const { projects, total, pages } = data;
+    totalPages = pages;
+    totalItems = total;
+
+    if (!projects.length) {
+      grid.innerHTML = '';
+      empty.classList.remove('hidden');
+      status.textContent = '';
+      return;
+    }
+
+    status.textContent = `Showing ${(currentPage - 1) * ITEMS_PER_PAGE + 1}–${Math.min(currentPage * ITEMS_PER_PAGE, total)} of ${total} archived masterpieces`;
+
+    grid.innerHTML = projects.map((p, i) => renderCard(p, i)).join('');
+
+    // Animate cards in sequence
+    grid.querySelectorAll('article').forEach((el, i) => {
+      el.style.animationDelay = `${i * 0.06}s`;
+      el.classList.add('fade-up');
+    });
+
+    // Wire buttons
+    wireDownloadBtns(projects);
+    wireShareBtns(projects);
+    wireStatusDropdowns();
+    if (isAdmin) wireAdminBtns(projects);
+
+    renderPagination(total);
+
+  } catch (err) {
+    grid.innerHTML = `
+      <div class="col-span-3 text-center py-20 space-y-3">
+        <span class="material-symbols-outlined text-4xl text-error/50">cloud_off</span>
+        <p class="text-error font-bold text-sm">Failed to load projects</p>
+        <p class="text-xs text-on-surface-variant">${err.message}</p>
+        <p class="text-xs text-on-surface-variant/60">Make sure the backend is running on localhost:5001</p>
+      </div>`;
+    status.textContent = '';
+  }
+}
+
+// ── Render card HTML ───────────────────────────────────────────────────────
+function renderCard(p, offset) {
+  const img     = p.imageUrl || FALLBACK_IMAGES[p.category] || FALLBACK_IMAGES.Other;
+  const stagger  = offset % 3 === 1 ? 'lg:mt-12' : '';
+  const statuses = ['Completed','Archived','Commissioned','In Progress'];
+  const statusOptions = statuses.map(s =>
+    `<option value="${s}" ${p.status === s ? 'selected' : ''}>${s}</option>`
+  ).join('');
+  const adminBtns = isAdmin ? `
+    <button data-id="${p._id}" class="edit-project-btn w-10 h-10 flex items-center justify-center bg-surface-container-low text-primary rounded-lg hover:bg-surface-container-high transition-all" title="Edit">
+      <span class="material-symbols-outlined text-base">edit</span>
+    </button>
+    <button data-id="${p._id}" class="delete-project-btn w-10 h-10 flex items-center justify-center bg-error-container/30 text-error rounded-lg hover:bg-error-container transition-all" title="Delete">
+      <span class="material-symbols-outlined text-base">delete</span>
+    </button>` : '';
+
+  return `
+    <article class="group ${stagger}">
+      <div class="bg-surface-container-lowest rounded-xl overflow-hidden transition-all duration-500 hover:shadow-[0_20px_50px_rgba(84,59,54,0.12)]">
+        <div class="project-image-wrap overflow-hidden relative">
+          <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+               src="${img}" alt="${p.title}"
+               onerror="this.src='${FALLBACK_IMAGES.Other}'"/>
+          <div class="absolute top-3 right-3">
+            <select data-id="${p._id}" class="status-select bg-surface-container-lowest/90 backdrop-blur-md text-on-surface-variant px-2 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase shadow-sm border-0 focus:outline-none cursor-pointer transition-all hover:bg-surface-container-high">
+              ${statusOptions}
+            </select>
+          </div>
+        </div>
+        <div class="p-5 sm:p-8">
+          <div class="flex justify-between items-start mb-3">
+            <div class="overflow-hidden">
+              <p class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-1">${p.category}</p>
+              <h3 class="text-xl font-bold text-primary truncate">${p.title}</h3>
+              <p class="text-sm text-on-surface-variant font-label uppercase tracking-widest mt-1">${p.material || '—'}</p>
+            </div>
+          </div>
+          ${p.notes ? `<p class="text-xs text-on-surface-variant mt-2 line-clamp-2">${p.notes}</p>` : ''}
+          <div class="flex items-center gap-2 mt-6 pt-5 border-t border-outline-variant/10 flex-wrap">
+            <button data-id="${p._id}" data-title="${p.title}" data-material="${p.material || ''}" data-notes="${p.notes || ''}" data-date="${new Date(p.createdAt).toLocaleDateString('en-IN')}"
+              class="download-btn flex-1 py-3 bg-surface-container-high hover:bg-surface-container-highest text-primary font-bold text-xs tracking-widest uppercase rounded-lg transition-all flex items-center justify-center gap-2 min-w-[100px]">
+              <span class="material-symbols-outlined text-sm">download</span> Pattern
+            </button>
+            <button data-id="${p._id}" data-title="${p.title}" data-category="${p.category}"
+              class="share-btn w-10 h-10 flex items-center justify-center bg-surface-container-low text-primary rounded-lg hover:bg-surface-container-high transition-all" title="Share">
+              <span class="material-symbols-outlined">share</span>
+            </button>
+            ${adminBtns}
+          </div>
+        </div>
+      </div>
+    </article>`;
+}
+
+// ── Filter Tabs ────────────────────────────────────────────────────────────
+function wireFilterTabs() {
+  document.querySelectorAll('.filter-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCategory = btn.dataset.cat;
+      currentPage = 1;
+      loadProjects();
+    });
+  });
+}
+
+// ── Pagination ─────────────────────────────────────────────────────────────
+function renderPagination(total) {
+  const footer = document.getElementById('paginationFooter');
+  const label  = document.getElementById('paginationLabel');
+  const btns   = document.getElementById('paginationBtns');
+
+  if (totalPages <= 1) { footer.classList.add('hidden'); return; }
+  footer.classList.remove('hidden');
+  label.textContent = `Page ${currentPage} of ${totalPages}`;
+
+  btns.innerHTML = '';
+
+  // Prev
+  const prev = document.createElement('button');
+  prev.innerHTML = '<span class="material-symbols-outlined text-base">chevron_left</span>';
+  prev.className = `w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant/30 text-primary hover:bg-surface-container-low transition-all ${currentPage === 1 ? 'opacity-40 pointer-events-none' : ''}`;
+  prev.addEventListener('click', () => { currentPage--; loadProjects(); scrollToTop(); });
+  btns.appendChild(prev);
+
+  // Page buttons (show max 5 around current)
+  const range = buildPageRange(currentPage, totalPages);
+  range.forEach(p => {
+    if (p === '...') {
+      const dots = document.createElement('span');
+      dots.className = 'w-10 h-10 flex items-center justify-center text-on-surface-variant';
+      dots.textContent = '…';
+      btns.appendChild(dots);
+    } else {
+      const btn = document.createElement('button');
+      btn.textContent = p;
+      btn.className = `w-10 h-10 flex items-center justify-center rounded-full transition-all text-sm font-bold ${p === currentPage ? 'bg-primary text-on-primary' : 'border border-outline-variant/30 text-primary hover:bg-surface-container-low'}`;
+      btn.addEventListener('click', () => { currentPage = p; loadProjects(); scrollToTop(); });
+      btns.appendChild(btn);
+    }
+  });
+
+  // Next
+  const next = document.createElement('button');
+  next.innerHTML = '<span class="material-symbols-outlined text-base">chevron_right</span>';
+  next.className = `w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant/30 text-primary hover:bg-surface-container-low transition-all ${currentPage === totalPages ? 'opacity-40 pointer-events-none' : ''}`;
+  next.addEventListener('click', () => { currentPage++; loadProjects(); scrollToTop(); });
+  btns.appendChild(next);
+}
+
+function buildPageRange(current, total) {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages = [];
+  pages.push(1);
+  if (current > 3) pages.push('...');
+  for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) pages.push(i);
+  if (current < total - 2) pages.push('...');
+  pages.push(total);
+  return pages;
+}
+
+function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+// ── Status Dropdown (all users) ────────────────────────────────────────────
+function wireStatusDropdowns() {
+  document.querySelectorAll('.status-select').forEach(sel => {
+    sel.addEventListener('change', async () => {
+      const id     = sel.dataset.id;
+      const status = sel.value;
+      const orig   = sel.querySelector('[selected]')?.value || status;
+      try {
+        await window.api.patchProjectStatus(id, status);
+        showToast(`Status → ${status}`);
+        // Update the selected option attribute
+        sel.querySelectorAll('option').forEach(opt => opt.removeAttribute('selected'));
+        sel.querySelector(`option[value="${status}"]`)?.setAttribute('selected', '');
+      } catch (err) {
+        sel.value = orig; // revert on fail
+        showToast('Failed to update status', 'error');
+      }
+    });
+  });
+}
+
+// ── Download ───────────────────────────────────────────────────────────────
+function wireDownloadBtns(projects) {
+  document.querySelectorAll('.download-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const { title, material, notes, date } = btn.dataset;
+      const content = [
+        `LEATHERCRAFT PROJECT PATTERN`,
+        `================================`,
+        `Title    : ${title}`,
+        `Material : ${material || 'Not specified'}`,
+        `Date     : ${date}`,
+        ``,
+        `Notes`,
+        `-----`,
+        notes || 'No notes recorded.',
+        ``,
+        `Generated by LeatherCraft Atelier`
+      ].join('\n');
+
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = `${title.replace(/\s+/g, '_')}_pattern.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      showToast(`"${title}" pattern downloaded`);
+    });
+  });
+}
+
+// ── Share ──────────────────────────────────────────────────────────────────
+function wireShareBtns(projects) {
+  document.querySelectorAll('.share-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const { title, category } = btn.dataset;
+      const shareData = {
+        title: `${title} | LeatherCraft`,
+        text: `Check out this ${category} project from the LeatherCraft Atelier: ${title}`,
+        url: window.location.href
+      };
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+        } else {
+          await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
+          showToast('Link copied to clipboard!');
+        }
+      } catch (_) {
+        showToast('Could not share', 'error');
+      }
+    });
+  });
+}
+
+// ── Admin: Edit / Delete ───────────────────────────────────────────────────
+function wireAdminBtns(projects) {
+  document.querySelectorAll('.edit-project-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const p = projects.find(x => x._id === btn.dataset.id);
+      if (!p) return;
+      editingId = p._id;
+      document.getElementById('modalTitle').textContent = 'Edit Project';
+      document.getElementById('pTitle').value    = p.title;
+      document.getElementById('pCategory').value = p.category;
+      document.getElementById('pStatus').value   = p.status;
+      document.getElementById('pMaterial').value = p.material || '';
+      document.getElementById('pImageUrl').value = p.imageUrl || '';
+      document.getElementById('pNotes').value    = p.notes || '';
+      openModal();
+    });
+  });
+
+  document.querySelectorAll('.delete-project-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Delete this project permanently?')) return;
+      try {
+        await window.api.deleteProject(btn.dataset.id);
+        showToast('Project deleted');
+        loadProjects();
+      } catch (err) {
+        showToast('Delete failed: ' + err.message, 'error');
+      }
+    });
+  });
+}
+
+// ── Modal ──────────────────────────────────────────────────────────────────
+function wireModal() {
+  document.getElementById('addProjectBtn').addEventListener('click', () => {
+    editingId = null;
+    document.getElementById('modalTitle').textContent = 'Add Project';
+    document.getElementById('projectForm').reset();
+    openModal();
+  });
+  document.getElementById('closeProjectModal').addEventListener('click', closeModal);
+  document.getElementById('cancelProjectModal').addEventListener('click', closeModal);
+  document.getElementById('projectModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('projectModal')) closeModal();
+  });
+  document.getElementById('projectForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = document.getElementById('projectSubmitBtn');
+    const msg = document.getElementById('projectMsg');
+    const payload = {
+      title:    document.getElementById('pTitle').value.trim(),
+      category: document.getElementById('pCategory').value,
+      status:   document.getElementById('pStatus').value,
+      material: document.getElementById('pMaterial').value.trim(),
+      imageUrl: document.getElementById('pImageUrl').value.trim(),
+      notes:    document.getElementById('pNotes').value.trim()
+    };
+    btn.textContent = 'Saving…';
+    btn.disabled = true;
+    try {
+      if (editingId) {
+        await window.api.updateProject(editingId, payload);
+        showToast('Project updated!');
+      } else {
+        await window.api.createProject(payload);
+        showToast('Project added!');
+      }
+      closeModal();
+      loadProjects();
+    } catch (err) {
+      msg.textContent = 'Error: ' + err.message;
+      msg.className = 'text-xs text-center text-error font-bold';
+      msg.classList.remove('hidden');
+    } finally {
+      btn.textContent = 'Save Project';
+      btn.disabled = false;
+    }
+  });
+}
+
+function openModal() {
+  const m = document.getElementById('projectModal');
+  const i = document.getElementById('projectModalInner');
+  m.classList.remove('hidden');
+  requestAnimationFrame(() => {
+    i.classList.remove('scale-95', 'opacity-0');
+    i.classList.add('scale-100', 'opacity-100');
+  });
+  document.getElementById('projectMsg').classList.add('hidden');
+}
+function closeModal() {
+  const m = document.getElementById('projectModal');
+  const i = document.getElementById('projectModalInner');
+  i.classList.remove('scale-100', 'opacity-100');
+  i.classList.add('scale-95', 'opacity-0');
+  setTimeout(() => m.classList.add('hidden'), 250);
+}
+
+// ── Toast ──────────────────────────────────────────────────────────────────
+function showToast(msg, type = 'success') {
+  const t = document.createElement('div');
+  t.className = `fixed bottom-24 left-1/2 -translate-x-1/2 z-[300] px-6 py-3 rounded-xl text-sm font-bold shadow-2xl transition-all duration-300 ${type === 'error' ? 'bg-error text-on-error' : 'bg-primary text-on-primary'}`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => { t.classList.add('opacity-0'); setTimeout(() => t.remove(), 300); }, 2500);
+}
+</script>
+</body>
+</html>

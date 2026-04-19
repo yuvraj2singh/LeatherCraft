@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LeatherCraft | Artisan Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="./css/theme.css" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-highest": "#e4e2e1",
+          "primary-fixed": "#ffdad4",
+          "on-surface": "#1b1c1c",
+          "primary-container": "#6e524d",
+          "on-primary-container": "#ecc7c0",
+          "tertiary": "#00446c",
+          "on-error": "#ffffff",
+          "tertiary-fixed": "#cee5ff",
+          "surface-container": "#f0eded",
+          "surface-container-low": "#f6f3f2",
+          "secondary-fixed-dim": "#ffb77b",
+          "tertiary-container": "#155c8c",
+          "on-surface-variant": "#54433a",
+          "secondary-container": "#fdad67",
+          "on-tertiary-container": "#a7d3ff",
+          "outline": "#877369",
+          "background": "#fcf9f8",
+          "on-tertiary": "#ffffff",
+          "inverse-on-surface": "#f3f0ef",
+          "on-tertiary-fixed": "#001d32",
+          "on-tertiary-fixed-variant": "#004a75",
+          "surface-dim": "#dcd9d9",
+          "inverse-surface": "#303030",
+          "on-error-container": "#93000a",
+          "error": "#ba1a1a",
+          "primary": "#543b36",
+          "inverse-primary": "#e3beb8",
+          "surface-container-high": "#eae7e7",
+          "on-primary": "#ffffff",
+          "tertiary-fixed-dim": "#96ccff",
+          "outline-variant": "#dac2b6",
+          "on-secondary-container": "#763f00",
+          "on-primary-fixed": "#2b1613",
+          "error-container": "#ffdad6",
+          "surface-tint": "#745853",
+          "secondary-fixed": "#ffdcc2",
+          "on-secondary-fixed-variant": "#6d3a00",
+          "surface": "#fcf9f8",
+          "primary-fixed-dim": "#e3beb8",
+          "on-background": "#1b1c1c",
+          "secondary": "#8c4f10",
+          "on-secondary": "#ffffff",
+          "surface-variant": "#e4e2e1",
+          "on-secondary-fixed": "#2e1500",
+          "surface-container-lowest": "#ffffff",
+          "on-primary-fixed-variant": "#5b403c",
+          "surface-bright": "#fcf9f8"
+        },
+        borderRadius: {
+          DEFAULT: "0.125rem",
+          lg: "0.25rem",
+          xl: "0.5rem",
+          full: "0.75rem"
+        },
+        fontFamily: {
+          headline: ["Noto Serif"],
+          body: ["Manrope"],
+          label: ["Manrope"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: 'Manrope', sans-serif; background-color: #fcf9f8; color: #1b1c1c; }
+  .font-serif-italic { font-family: 'Noto Serif', serif; font-style: italic; }
+  .font-serif { font-family: 'Noto Serif', serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Commission card skeleton shimmer */
+  @keyframes shimmer {
+    0% { background-position: -800px 0; }
+    100% { background-position: 800px 0; }
+  }
+  .skeleton {
+    background: linear-gradient(90deg, #f0eded 25%, #e4e2e1 50%, #f0eded 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 0.5rem;
+  }
+  .dark .skeleton {
+    background: linear-gradient(90deg, #222020 25%, #2c2a29 50%, #222020 75%);
+    background-size: 800px 100%;
+  }
+
+  /* Modal animation */
+  #commissionModal .modal-inner,
+  #reorderModal .modal-inner {
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+</style>
+</head>
+
+<body class="bg-background text-on-surface">
+
+<!-- ─── TopAppBar ─────────────────────────────────────────────────────────── -->
+<header class="bg-[#fcf9f8] dark:bg-[#1b1c1c] docked full-width top-0 z-50 transition-colors duration-300 shadow-[0_4px_20px_rgba(84,59,54,0.05)] sticky">
+  <div class="flex justify-between items-center w-full px-8 py-4">
+    <div class="flex items-center gap-8">
+      <span class="font-serif text-2xl font-bold tracking-tighter text-[#543b36] dark:text-[#fcf9f8]">LeatherCraft</span>
+      <nav class="hidden md:flex space-x-6">
+        <a class="font-serif italic tracking-tight text-lg text-[#8c4f10] dark:text-[#ffb77b] font-semibold border-b-2 border-[#8c4f10] dark:border-[#ffb77b] pb-1" href="index.html">Workshop</a>
+        <a class="font-serif italic tracking-tight text-lg text-[#543b36]/70 dark:text-[#fcf9f8]/60 hover:text-[#543b36] dark:hover:text-[#fcf9f8] transition-all" href="pages/inventory.html">Inventory</a>
+        <a class="font-serif italic tracking-tight text-lg text-[#543b36]/70 dark:text-[#fcf9f8]/60 hover:text-[#543b36] dark:hover:text-[#fcf9f8] transition-all" href="pages/archive.html">Journal</a>
+      </nav>
+    </div>
+    <div class="flex items-center space-x-4">
+      <button class="material-symbols-outlined p-2 text-[#543b36] dark:text-[#dac2b6] hover:bg-[#f0eded] dark:hover:bg-[#333130] rounded-md transition-all active:scale-95">light_mode</button>
+      <button class="material-symbols-outlined p-2 text-[#543b36] dark:text-[#dac2b6] hover:bg-[#f0eded] dark:hover:bg-[#333130] rounded-md transition-all active:scale-95">account_circle</button>
+    </div>
+  </div>
+</header>
+
+<div class="flex min-h-screen">
+
+  <!-- ─── SideNavBar ──────────────────────────────────────────────────────── -->
+  <aside class="hidden md:flex flex-col h-screen w-64 sticky top-20 bg-gradient-to-b from-[#fcf9f8] to-[#f6f3f2] dark:from-[#1b1c1c] dark:to-[#161616] py-8 space-y-6">
+    <div class="px-6 mb-4">
+      <h2 class="font-serif italic text-xl text-[#543b36] dark:text-[#fcf9f8]">LeatherCraft</h2>
+      <p class="font-sans tracking-wide text-[10px] uppercase text-[#543b36]/60 dark:text-[#fcf9f8]/40">Premium Grade</p>
+    </div>
+    <nav class="flex-grow">
+      <ul class="space-y-2">
+        <li>
+          <a class="flex items-center space-x-3 bg-[#fcf9f8] dark:bg-[#262423] text-[#8c4f10] dark:text-[#ffb77b] rounded-l-full ml-4 pl-4 py-3 shadow-sm font-sans tracking-wide text-sm uppercase" href="index.html">
+            <span class="material-symbols-outlined">architecture</span><span  >Home</span>
+          </a>
+        </li>
+        <li>
+          <a class="flex items-center space-x-3 text-[#543b36]/60 dark:text-[#fcf9f8]/40 hover:pl-6 transition-all font-sans tracking-wide text-sm uppercase py-3 ml-4 pl-4" href="pages/inventory.html">
+            <span class="material-symbols-outlined">layers</span><span>Materials</span>
+          </a>
+        </li>
+        <li>
+          <a class="flex items-center space-x-3 text-[#543b36]/60 dark:text-[#fcf9f8]/40 hover:pl-6 transition-all font-sans tracking-wide text-sm uppercase py-3 ml-4 pl-4" href="pages/cost.html">
+            <span class="material-symbols-outlined">payments</span><span>Ledger</span>
+          </a>
+        </li>
+        <li>
+          <a class="flex items-center space-x-3 text-[#543b36]/60 dark:text-[#fcf9f8]/40 hover:pl-6 transition-all font-sans tracking-wide text-sm uppercase py-3 ml-4 pl-4" href="pages/archive.html">
+            <span class="material-symbols-outlined">history</span><span>Archive</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="px-6 pt-4">
+      <!-- FIX: New Commission button opens modal -->
+      <button id="newCommissionBtn" class="w-full py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-xl font-bold text-sm uppercase tracking-widest shadow-lg hover:brightness-110 active:scale-95 transition-all">
+        New Commission
+      </button>
+    </div>
+  </aside>
+
+  <!-- ─── Main Content Canvas ─────────────────────────────────────────────── -->
+  <main class="flex-grow p-8 md:p-12 space-y-12">
+
+    <!-- Dashboard Header -->
+    <section class="flex flex-col md:flex-row justify-between items-end gap-6">
+      <div class="space-y-2">
+        <span class="label-md uppercase tracking-[0.2em] text-secondary font-bold">Master artisan overview</span>
+        <h1 class="text-5xl font-serif font-bold tracking-tighter text-primary">Dashboard</h1>
+        <!-- FIX: Username pulled from localStorage via JS, not hardcoded -->
+        <p class="font-body text-on-surface-variant max-w-lg">Welcome back, <span id="dashUserName" class="font-semibold text-primary">Artisan</span>. Monitoring high-grade leather supply, ongoing hand-stitched commissions, and workshop fiscal projections.</p>
+      </div>
+      <div class="flex items-center gap-4 bg-surface-container-low p-2 rounded-xl">
+        <div class="text-right px-4">
+          <p class="text-[10px] uppercase tracking-widest font-bold text-secondary">Workshop Status</p>
+          <p class="font-serif italic text-lg text-primary">Fully Operational</p>
+        </div>
+        <div class="h-12 w-[2px] bg-outline-variant/30"></div>
+        <div class="p-3">
+          <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">precision_manufacturing</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Top Summary Stats -->
+    <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="md:col-span-2 bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between min-h-[220px]">
+        <div class="flex justify-between">
+          <span class="label-md uppercase tracking-widest text-on-surface-variant font-bold">Total Inventory Value</span>
+          <span class="material-symbols-outlined text-tertiary">inventory_2</span>
+        </div>
+        <div>
+          <!-- FIX: id for JS to update with correct currency symbol -->
+          <h3 id="totalInventoryValue" class="text-4xl font-serif text-primary font-bold">—</h3>
+          <p class="text-body text-tertiary font-medium flex items-center gap-2 mt-2">
+            <span class="material-symbols-outlined text-sm">trending_up</span>
+            +12.4% from last quarter
+          </p>
+        </div>
+      </div>
+      <div class="bg-surface-container-low p-8 rounded-xl flex flex-col justify-between">
+        <span class="label-md uppercase tracking-widest text-on-surface-variant font-bold">Active Designs</span>
+        <div>
+          <h3 id="activeDesignsCount" class="text-4xl font-serif text-primary">—</h3>
+          <p class="text-xs uppercase tracking-widest text-on-surface-variant/60 mt-2">In development</p>
+        </div>
+      </div>
+      <div class="bg-primary text-on-primary p-8 rounded-xl flex flex-col justify-between">
+        <span class="label-md uppercase tracking-widest text-on-primary/60 font-bold">Est. Profit</span>
+        <div>
+          <!-- FIX: id for JS currency update -->
+          <h3 id="estProfit" class="text-4xl font-serif font-bold">—</h3>
+          <p class="text-xs uppercase tracking-widest text-on-primary/40 mt-2">Pending completions</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Workspace Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+      <!-- Active Commissions (Left 2/3) -->
+      <div class="lg:col-span-2 space-y-8">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-serif font-bold text-primary">Active Commissions</h2>
+          <a class="text-sm font-bold uppercase tracking-widest text-secondary flex items-center gap-2" href="pages/inventory.html">
+            View All <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </a>
+        </div>
+        <!-- FIX: Commission cards rendered by JS from API -->
+        <div id="commissionsContainer" class="space-y-4">
+          <!-- Skeleton loaders shown while fetching -->
+          <div class="skeleton h-[112px] w-full"></div>
+          <div class="skeleton h-[112px] w-full"></div>
+          <div class="skeleton h-[112px] w-full"></div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="space-y-12">
+
+        <!-- Inventory Alerts -->
+        <div class="space-y-6">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+            <h2 class="text-2xl font-serif font-bold text-primary">Inventory Alerts</h2>
+          </div>
+          <!-- FIX: Alert rendered by JS; reorder button opens modal -->
+          <div id="alertsContainer" class="space-y-4">
+            <div class="skeleton h-[120px] w-full"></div>
+          </div>
+          <div class="bg-surface-container-low p-6 rounded-xl space-y-4">
+            <h5 class="font-bold text-primary">Delayed Shipment</h5>
+            <p class="text-sm text-on-surface-variant">Order #9921 (Buckram Lining) is held in transit.</p>
+            <div class="w-full bg-outline-variant/20 h-1 rounded-full overflow-hidden">
+              <div class="bg-secondary w-2/3 h-full"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vault Highlights -->
+        <div class="space-y-6">
+          <h2 class="text-2xl font-serif font-bold text-primary">Vault Highlights</h2>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden group">
+              <div class="h-24 bg-primary overflow-hidden">
+                <img class="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhQ8QJUxIRc7sisUXx-HltUKfKhfD75Fnn52UVze41kc8wroUF8OMEtYvSSTfoKSDedtvxmErMH-ShZG056Lr6yRwGyJgK1ylV4C9Y_z7Wp683DdrepJN1TJpKxrTQrwvfs0ChVPy9XHsHSPpxozeeHiLmpDPd36U9XtO2Odfzd91EgjyjV8OOO05wriCpBWOOH4H6pU_1YSVg3TWMOCKoBl8ErTaDy9QO0AwxXGTMg_MXdaQQ_s2jeGsP7UTSbiG1-8yY3FxaYZ0g" alt="Leather texture"/>
+              </div>
+              <div class="p-4">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-secondary">Tannery</p>
+                <p class="font-serif font-bold text-primary">Badalassi</p>
+              </div>
+            </div>
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden group">
+              <div class="h-24 bg-primary overflow-hidden">
+                <img class="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqsM8CPUMybprtXBORfA5MBuuIIbhvpU5Roj9vKGohPZXbyHhYTatWrH8QhMv0wDdiqukHq7nGd97nU8GR8AB2hE7RMW8l8EIzcefDohHcELmJlyNX-YF7ChknprG2mLLBIG9RJxMdkV9EcapHRXbFWeFoJcXnYqDHCthQYwirYKMXxDWPPSRwY4diuX3SStL7nQS3N30UiR9Ku0WDWU1mkGOHT_7IZ9eSPbNGvXBO28ymD4rYI6RBiS3VXJsD3nFN8uiegs0GJARe" alt="Leather hide"/>
+              </div>
+              <div class="p-4">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-secondary">Tannery</p>
+                <p class="font-serif font-bold text-primary">Wickett &amp; Craig</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ─── BottomNavBar (Mobile) ──────────────────────────────────────────────── -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full h-20 bg-[#fcf9f8]/95 dark:bg-[#1b1c1c]/95 backdrop-blur-md flex justify-around items-center px-6 pb-safe z-50 border-t border-[#dac2b6]/20 dark:border-[#3a2f2b]/40 shadow-[0_-8px_30px_rgba(84,59,54,0.1)]">
+  <a class="flex flex-col items-center justify-center text-[#8c4f10] dark:text-[#ffb77b] bg-[#8c4f10]/5 rounded-xl px-4 py-1" href="index.html">
+    <span class="material-symbols-outlined">home_app_logo</span>
+    <span class="font-sans text-[10px] font-medium tracking-widest uppercase mt-1">Home</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#fcf9f8]/40 hover:text-[#543b36] transition-all" href="pages/inventory.html">
+    <span class="material-symbols-outlined">layers</span>
+    <span class="font-sans text-[10px] font-medium tracking-widest uppercase mt-1">Vault</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#fcf9f8]/40 hover:text-[#543b36] transition-all" href="pages/archive.html">
+    <span class="material-symbols-outlined">history</span>
+    <span class="font-sans text-[10px] font-medium tracking-widest uppercase mt-1">Archive</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#fcf9f8]/40 hover:text-[#543b36] transition-all" href="pages/auth.html">
+    <span class="material-symbols-outlined">person</span>
+    <span class="font-sans text-[10px] font-medium tracking-widest uppercase mt-1">Me</span>
+  </a>
+</nav>
+
+<!-- Contextual FAB (Mobile) -->
+<button id="fabNewCommission" class="fixed bottom-24 right-8 w-16 h-16 bg-gradient-to-br from-secondary to-secondary-container text-on-secondary rounded-full shadow-2xl flex items-center justify-center md:hidden active:scale-90 transition-transform">
+  <span class="material-symbols-outlined text-3xl">add</span>
+</button>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     NEW COMMISSION MODAL
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="commissionModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[100]">
+  <div class="modal-inner bg-surface-container-lowest rounded-xl shadow-2xl w-full max-w-lg p-8 scale-95 opacity-0">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="font-serif text-2xl font-bold text-primary">New Commission</h2>
+        <p class="text-xs text-on-surface-variant mt-1 uppercase tracking-widest">Bespoke order intake</p>
+      </div>
+      <button id="closeCommissionModal" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">close</button>
+    </div>
+    <form id="commissionForm" class="space-y-5">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Client Name</label>
+          <input id="c_clientName" type="text" placeholder="e.g. Julian Thorne" required
+            class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm"/>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Item Name</label>
+          <input id="c_itemName" type="text" placeholder="e.g. Heritage Attache" required
+            class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm"/>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Series / Type</label>
+          <input id="c_series" type="text" placeholder="e.g. Premium Series"
+            class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm"/>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Leather / Material</label>
+          <input id="c_material" type="text" placeholder="e.g. Wickett Bridle"
+            class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm"/>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">
+            Price (<span id="modalCurrencyLabel">$</span>)
+          </label>
+          <input id="c_price" type="number" min="0" step="0.01" placeholder="0.00" required
+            class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm"/>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Status</label>
+          <select id="c_status"
+            class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm">
+            <option value="In Progress">In Progress</option>
+            <option value="Designing">Designing</option>
+            <option value="Waiting List">Waiting List</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+      </div>
+      <p id="commissionMsg" class="text-xs text-center hidden"></p>
+      <div class="flex gap-4 pt-2">
+        <button type="button" id="cancelCommissionBtn" class="flex-1 py-3 border border-outline-variant text-on-surface-variant font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-surface-container transition-all">
+          Cancel
+        </button>
+        <button type="submit" id="commissionSubmitBtn" class="flex-1 py-3 bg-primary text-on-primary font-bold text-xs uppercase tracking-widest rounded-lg hover:opacity-90 active:scale-95 transition-all">
+          Save Commission
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     REORDER MODAL
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="reorderModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[100]">
+  <div class="modal-inner bg-surface-container-lowest rounded-xl shadow-2xl w-full max-w-md p-8 scale-95 opacity-0">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="font-serif text-2xl font-bold text-primary">Reorder Stock</h2>
+        <p class="text-xs text-on-surface-variant mt-1 uppercase tracking-widest">Low inventory replenishment</p>
+      </div>
+      <button id="closeReorderModal" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">close</button>
+    </div>
+    <form id="reorderForm" class="space-y-5">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Item</label>
+        <input id="r_itemName" type="text" readonly
+          class="w-full bg-surface-container border-b-2 border-outline-variant py-3 px-2 text-on-surface-variant text-sm cursor-not-allowed"/>
+      </div>
+      <input id="r_itemId" type="hidden"/>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Reorder Qty</label>
+          <input id="r_qty" type="number" min="1" value="10" required
+            class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm"/>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">
+            Unit Cost (<span id="reorderCurrencyLabel">$</span>)
+          </label>
+          <input id="r_cost" type="number" min="0" step="0.01" placeholder="0.00"
+            class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm"/>
+        </div>
+      </div>
+      <!-- Live total -->
+      <div class="bg-surface-container p-4 rounded-lg flex justify-between items-center">
+        <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Total Reorder Cost</span>
+        <span id="reorderTotal" class="font-serif text-xl font-bold text-primary">—</span>
+      </div>
+      <p id="reorderMsg" class="text-xs text-center hidden"></p>
+      <div class="flex gap-4 pt-2">
+        <button type="button" id="cancelReorderBtn" class="flex-1 py-3 border border-outline-variant text-on-surface-variant font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-surface-container transition-all">
+          Cancel
+        </button>
+        <button type="submit" id="reorderSubmitBtn" class="flex-1 py-3 bg-error text-on-error font-bold text-xs uppercase tracking-widest rounded-lg hover:opacity-90 active:scale-95 transition-all">
+          Confirm Reorder
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- ─── Scripts ────────────────────────────────────────────────────────────── -->
+<script src="./js/api.js"></script>
+<script src="./js/theme.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+
+  // ── Auth Guard ──────────────────────────────────────────────────────────────
+  if (!localStorage.getItem('leathercraft_token')) {
+    window.location.href = 'pages/auth.html';
+    return;
+  }
+
+  // ── Helpers ─────────────────────────────────────────────────────────────────
+  const sym = window.getCurrencySymbol();
+
+  // Format a number with currency symbol, locale-aware
+  function formatCurrency(amount) {
+    const user = JSON.parse(localStorage.getItem('leathercraft_user') || '{}');
+    const locale = user.currency === 'INR' ? 'en-IN' : 'en-US';
+    return sym + Number(amount).toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  // Modal open/close helpers
+  function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    const inner = modal.querySelector('.modal-inner');
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      inner.classList.remove('scale-95', 'opacity-0');
+      inner.classList.add('scale-100', 'opacity-100');
+    });
+  }
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    const inner = modal.querySelector('.modal-inner');
+    inner.classList.remove('scale-100', 'opacity-100');
+    inner.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => modal.classList.add('hidden'), 250);
+  }
+
+  // ── Username ────────────────────────────────────────────────────────────────
+  const user = window.getCurrentUser();
+  if (user && user.name) {
+    document.getElementById('dashUserName').textContent = user.name;
+  }
+
+  // ── Set currency labels in modals ────────────────────────────────────────────
+  document.getElementById('modalCurrencyLabel').textContent = sym;
+  document.getElementById('reorderCurrencyLabel').textContent = sym;
+
+  // ── Live reorder total ───────────────────────────────────────────────────────
+  function updateReorderTotal() {
+    const qty = parseFloat(document.getElementById('r_qty').value) || 0;
+    const cost = parseFloat(document.getElementById('r_cost').value) || 0;
+    document.getElementById('reorderTotal').textContent = qty && cost ? formatCurrency(qty * cost) : '—';
+  }
+  document.getElementById('r_qty').addEventListener('input', updateReorderTotal);
+  document.getElementById('r_cost').addEventListener('input', updateReorderTotal);
+
+  // ── Fetch Inventory & populate stats + alerts ────────────────────────────────
+  let allInventory = [];
+  try {
+    allInventory = await window.api.getInventory();
+
+    // Total Inventory Value
+    const totalValue = allInventory.reduce((acc, item) => acc + ((item.stockQty || 0) * (item.costPerUnit || 0)), 0);
+    document.getElementById('totalInventoryValue').textContent = formatCurrency(totalValue);
+
+    // Active Designs count (non-zero stock items as proxy)
+    document.getElementById('activeDesignsCount').textContent = allInventory.filter(i => i.stockQty > 0).length;
+
+    // Est. Profit — 30% margin on total value as a simple projection
+    document.getElementById('estProfit').textContent = formatCurrency(totalValue * 0.3);
+
+    // Low stock alerts
+    const lowItems = allInventory.filter(i => (i.lowStockThreshold > 0) && (i.stockQty <= i.lowStockThreshold));
+    renderAlerts(lowItems);
+
+  } catch (err) {
+    console.warn('Could not load live inventory stats:', err.message);
+    document.getElementById('totalInventoryValue').textContent = `${sym}—`;
+    document.getElementById('estProfit').textContent = `${sym}—`;
+    document.getElementById('activeDesignsCount').textContent = '—';
+    renderAlerts([]);
+  }
+
+  // ── Render Alerts ────────────────────────────────────────────────────────────
+  function renderAlerts(lowItems) {
+    const container = document.getElementById('alertsContainer');
+    if (!lowItems.length) {
+      container.innerHTML = `
+        <div class="bg-surface-container-low p-6 rounded-xl flex items-center gap-4">
+          <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1;">check_circle</span>
+          <div>
+            <h5 class="font-bold text-primary">All Stock Levels Normal</h5>
+            <p class="text-sm text-on-surface-variant mt-1">No items are below their reorder threshold.</p>
+          </div>
+        </div>`;
+      return;
+    }
+    // Show top alert item prominently, rest as list
+    const top = lowItems[0];
+    container.innerHTML = `
+      <div class="bg-error-container/20 p-6 rounded-xl border-l-4 border-error space-y-4">
+        <div class="flex justify-between items-start">
+          <div>
+            <h5 class="font-bold text-on-error-container">${lowItems.length} Item${lowItems.length > 1 ? 's' : ''} Critical Low</h5>
+            <p class="text-sm text-on-error-container/80 mt-1">
+              ${lowItems.map(i => `${i.itemName} (${i.stockQty} ${i.unit || 'units'} left)`).join(' · ')}
+            </p>
+          </div>
+          <span class="material-symbols-outlined text-error flex-shrink-0">priority_high</span>
+        </div>
+        <button id="reorderNowBtn" data-id="${top._id || ''}" data-name="${top.itemName || ''}" data-cost="${top.costPerUnit || 0}"
+          class="w-full py-2 bg-error text-on-error rounded text-xs font-bold uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all">
+          Reorder Now
+        </button>
+      </div>`;
+
+    // Wire Reorder Now button
+    document.getElementById('reorderNowBtn').addEventListener('click', (e) => {
+      const btn = e.currentTarget;
+      document.getElementById('r_itemId').value = btn.dataset.id;
+      document.getElementById('r_itemName').value = btn.dataset.name;
+      document.getElementById('r_cost').value = btn.dataset.cost;
+      updateReorderTotal();
+      openModal('reorderModal');
+    });
+  }
+
+  // ── Fetch & Render Active Commissions ────────────────────────────────────────
+  // NOTE: There is no /api/commissions endpoint in api.js yet.
+  // Commissions are stored locally (localStorage) until a backend endpoint is added.
+  // When window.api.getCommissions() exists, swap the block below.
+
+  function getLocalCommissions() {
+    try {
+      return JSON.parse(localStorage.getItem('leathercraft_commissions') || '[]');
+    } catch { return []; }
+  }
+  function saveLocalCommissions(list) {
+    localStorage.setItem('leathercraft_commissions', JSON.stringify(list));
+  }
+
+  const STATUS_STYLES = {
+    'In Progress':  'bg-secondary/10 text-secondary',
+    'Designing':    'bg-primary/10 text-primary',
+    'Waiting List': 'bg-surface-container-highest text-on-surface-variant',
+    'Completed':    'bg-green-100 text-green-800',
+  };
+
+  function renderCommissions() {
+    const commissions = getLocalCommissions();
+    const container = document.getElementById('commissionsContainer');
+
+    if (!commissions.length) {
+      container.innerHTML = `
+        <div class="bg-surface-container-low p-8 rounded-xl text-center space-y-3">
+          <span class="material-symbols-outlined text-4xl text-on-surface-variant/40">inbox</span>
+          <p class="text-on-surface-variant font-medium">No active commissions yet.</p>
+          <button id="emptyNewBtn" class="text-secondary text-sm font-bold uppercase tracking-widest hover:underline">
+            + Create your first commission
+          </button>
+        </div>`;
+      document.getElementById('emptyNewBtn')?.addEventListener('click', () => openModal('commissionModal'));
+      return;
+    }
+
+    container.innerHTML = commissions.map((c, i) => `
+      <div class="group bg-surface-container-lowest p-6 flex flex-col md:flex-row items-center gap-6 rounded-xl hover:shadow-xl transition-all duration-300">
+        <div class="w-24 h-24 rounded-lg overflow-hidden shrink-0 bg-surface-container flex items-center justify-center">
+          <span class="material-symbols-outlined text-4xl text-on-surface-variant/30">work</span>
+        </div>
+        <div class="flex-grow space-y-1">
+          <span class="text-[10px] uppercase tracking-widest font-bold text-tertiary">${c.series || 'Commission'}</span>
+          <h4 class="text-xl font-serif font-bold text-primary">${c.itemName}</h4>
+          <p class="text-sm text-on-surface-variant">Client: ${c.clientName}${c.material ? ' · ' + c.material : ''}</p>
+        </div>
+        <div class="text-right flex flex-col items-end gap-2">
+          <span class="px-3 py-1 ${STATUS_STYLES[c.status] || STATUS_STYLES['In Progress']} text-[10px] uppercase tracking-widest font-bold rounded-full">${c.status}</span>
+          <p class="font-serif font-bold text-primary text-lg">${formatCurrency(c.price || 0)}</p>
+          <button data-index="${i}" class="delete-commission text-[10px] uppercase tracking-widest text-error/60 hover:text-error transition-colors">Remove</button>
+        </div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll('.delete-commission').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const list = getLocalCommissions();
+        list.splice(parseInt(btn.dataset.index), 1);
+        saveLocalCommissions(list);
+        renderCommissions();
+      });
+    });
+  }
+
+  renderCommissions();
+
+  // ── New Commission Modal Logic ────────────────────────────────────────────────
+  function openCommissionModal() { openModal('commissionModal'); }
+
+  document.getElementById('newCommissionBtn').addEventListener('click', openCommissionModal);
+  document.getElementById('fabNewCommission').addEventListener('click', openCommissionModal);
+  document.getElementById('closeCommissionModal').addEventListener('click', () => closeModal('commissionModal'));
+  document.getElementById('cancelCommissionBtn').addEventListener('click', () => closeModal('commissionModal'));
+
+  // Close on backdrop click
+  document.getElementById('commissionModal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('commissionModal')) closeModal('commissionModal');
+  });
+
+  document.getElementById('commissionForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('commissionMsg');
+    const btn = document.getElementById('commissionSubmitBtn');
+
+    const commission = {
+      clientName: document.getElementById('c_clientName').value.trim(),
+      itemName:   document.getElementById('c_itemName').value.trim(),
+      series:     document.getElementById('c_series').value.trim(),
+      material:   document.getElementById('c_material').value.trim(),
+      price:      parseFloat(document.getElementById('c_price').value) || 0,
+      status:     document.getElementById('c_status').value,
+      createdAt:  new Date().toISOString(),
+    };
+
+    if (!commission.clientName || !commission.itemName) {
+      msg.textContent = 'Client name and item name are required.';
+      msg.className = 'text-xs text-center text-error font-bold';
+      msg.classList.remove('hidden');
+      return;
+    }
+
+    btn.textContent = 'Saving…';
+    btn.disabled = true;
+
+    const list = getLocalCommissions();
+    list.unshift(commission); // newest first
+    saveLocalCommissions(list);
+
+    msg.textContent = '✓ Commission saved!';
+    msg.className = 'text-xs text-center text-secondary font-bold';
+    msg.classList.remove('hidden');
+
+    setTimeout(() => {
+      closeModal('commissionModal');
+      document.getElementById('commissionForm').reset();
+      msg.classList.add('hidden');
+      btn.textContent = 'Save Commission';
+      btn.disabled = false;
+      renderCommissions();
+    }, 800);
+  });
+
+  // ── Reorder Modal Logic ───────────────────────────────────────────────────────
+  document.getElementById('closeReorderModal').addEventListener('click', () => closeModal('reorderModal'));
+  document.getElementById('cancelReorderBtn').addEventListener('click', () => closeModal('reorderModal'));
+  document.getElementById('reorderModal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('reorderModal')) closeModal('reorderModal');
+  });
+
+  document.getElementById('reorderForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('reorderSubmitBtn');
+    const msg = document.getElementById('reorderMsg');
+    const itemId   = document.getElementById('r_itemId').value;
+    const qty      = parseInt(document.getElementById('r_qty').value) || 0;
+    const cost     = parseFloat(document.getElementById('r_cost').value) || 0;
+
+    if (!qty || qty < 1) {
+      msg.textContent = 'Please enter a valid quantity.';
+      msg.className = 'text-xs text-center text-error font-bold';
+      msg.classList.remove('hidden');
+      return;
+    }
+
+    btn.textContent = 'Placing Order…';
+    btn.disabled = true;
+
+    try {
+      // Find the item and update its stock via the API
+      const item = allInventory.find(i => i._id === itemId);
+      if (item && itemId) {
+        const newQty = (item.stockQty || 0) + qty;
+        const newCost = cost > 0 ? cost : (item.costPerUnit || 0);
+        await window.api.updateInventory(itemId, { stockQty: newQty, costPerUnit: newCost });
+
+        // Refresh local inventory list
+        allInventory = await window.api.getInventory();
+        const totalValue = allInventory.reduce((acc, i) => acc + ((i.stockQty || 0) * (i.costPerUnit || 0)), 0);
+        document.getElementById('totalInventoryValue').textContent = formatCurrency(totalValue);
+        document.getElementById('estProfit').textContent = formatCurrency(totalValue * 0.3);
+        document.getElementById('activeDesignsCount').textContent = allInventory.filter(i => i.stockQty > 0).length;
+
+        const newLowItems = allInventory.filter(i => (i.lowStockThreshold > 0) && (i.stockQty <= i.lowStockThreshold));
+        renderAlerts(newLowItems);
+      }
+
+      msg.textContent = '✓ Reorder placed! Stock updated.';
+      msg.className = 'text-xs text-center text-secondary font-bold';
+      msg.classList.remove('hidden');
+
+      setTimeout(() => {
+        closeModal('reorderModal');
+        document.getElementById('reorderForm').reset();
+        msg.classList.add('hidden');
+        btn.textContent = 'Confirm Reorder';
+        btn.disabled = false;
+        updateReorderTotal();
+      }, 900);
+
+    } catch (err) {
+      msg.textContent = 'Error: ' + err.message;
+      msg.className = 'text-xs text-center text-error font-bold';
+      msg.classList.remove('hidden');
+      btn.textContent = 'Confirm Reorder';
+      btn.disabled = false;
+    }
+  });
+
+});
+</script>
+</body>
+</html>

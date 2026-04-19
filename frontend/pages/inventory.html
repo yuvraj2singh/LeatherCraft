@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LeatherCraft | Inventory &amp; Material Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="../css/theme.css" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e4e2e1",
+                    "primary-fixed": "#ffdad4",
+                    "on-surface": "#1b1c1c",
+                    "primary-container": "#6e524d",
+                    "on-primary-container": "#ecc7c0",
+                    "tertiary": "#00446c",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed": "#cee5ff",
+                    "surface-container": "#f0eded",
+                    "surface-container-low": "#f6f3f2",
+                    "secondary-fixed-dim": "#ffb77b",
+                    "tertiary-container": "#155c8c",
+                    "on-surface-variant": "#54433a",
+                    "secondary-container": "#fdad67",
+                    "on-secondary-container": "#763f00",
+                    "outline": "#877369",
+                    "background": "#fcf9f8",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#f3f0ef",
+                    "on-tertiary-fixed": "#001d32",
+                    "on-tertiary-fixed-variant": "#004a75",
+                    "surface-dim": "#dcd9d9",
+                    "inverse-surface": "#303030",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "primary": "#543b36",
+                    "inverse-primary": "#e3beb8",
+                    "surface-container-high": "#eae7e7",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed-dim": "#96ccff",
+                    "outline-variant": "#dac2b6",
+                    "on-secondary-container": "#763f00",
+                    "on-primary-fixed": "#2b1613",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#745853",
+                    "secondary-fixed": "#ffdcc2",
+                    "on-secondary-fixed-variant": "#6d3a00",
+                    "surface": "#fcf9f8",
+                    "primary-fixed-dim": "#e3beb8",
+                    "on-background": "#1b1c1c",
+                    "secondary": "#8c4f10",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#e4e2e1",
+                    "on-secondary-fixed": "#2e1500",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#5b403c",
+                    "surface-bright": "#fcf9f8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Noto Serif"],
+                    "body": ["Manrope"],
+                    "label": ["Manrope"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .font-serif { font-family: 'Noto Serif', serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopAppBar — matches index.html exactly -->
+<header class="bg-[#fcf9f8] dark:bg-[#1b1c1c] docked full-width top-0 z-50 transition-colors duration-300 shadow-[0_4px_20px_rgba(84,59,54,0.05)] sticky">
+  <div class="flex justify-between items-center w-full px-8 py-4">
+    <div class="flex items-center gap-8">
+      <span class="font-serif text-2xl font-bold tracking-tighter text-[#543b36] dark:text-[#fcf9f8]">LeatherCraft</span>
+      <nav class="hidden md:flex space-x-6">
+        <a class="font-serif italic tracking-tight text-lg text-[#543b36]/70 dark:text-[#fcf9f8]/60 hover:text-[#543b36] dark:hover:text-[#fcf9f8] transition-all" href="../index.html">Workshop</a>
+        <a class="font-serif italic tracking-tight text-lg text-[#8c4f10] dark:text-[#ffb77b] font-semibold border-b-2 border-[#8c4f10] dark:border-[#ffb77b] pb-1" href="inventory.html">Inventory</a>
+        <a class="font-serif italic tracking-tight text-lg text-[#543b36]/70 dark:text-[#fcf9f8]/60 hover:text-[#543b36] dark:hover:text-[#fcf9f8] transition-all" href="archive.html">Journal</a>
+      </nav>
+    </div>
+    <div class="flex items-center space-x-4">
+      <button class="material-symbols-outlined p-2 text-[#543b36] dark:text-[#dac2b6] hover:bg-[#f0eded] dark:hover:bg-[#333130] rounded-md transition-all active:scale-95">light_mode</button>
+      <button class="material-symbols-outlined p-2 text-[#543b36] dark:text-[#dac2b6] hover:bg-[#f0eded] dark:hover:bg-[#333130] rounded-md transition-all active:scale-95">account_circle</button>
+    </div>
+  </div>
+</header>
+<div class="flex min-h-screen">
+<!-- SideNavBar — matches index.html exactly -->
+<aside class="hidden md:flex flex-col w-64 shrink-0 sticky top-[73px] h-[calc(100vh-73px)] self-start bg-gradient-to-b from-[#fcf9f8] to-[#f6f3f2] dark:from-[#1b1c1c] dark:to-[#161616] py-8 space-y-6 overflow-y-auto">
+  <div class="px-6 mb-4">
+    <h2 class="font-serif italic text-xl text-[#543b36] dark:text-[#fcf9f8]">LeatherCraft</h2>
+    <p class="font-sans tracking-wide text-[10px] uppercase text-[#543b36]/60 dark:text-[#fcf9f8]/40">Premium Grade</p>
+  </div>
+  <nav class="flex-grow">
+    <ul class="space-y-2">
+      <li>
+        <a class="flex items-center space-x-3 text-[#543b36]/60 dark:text-[#fcf9f8]/40 hover:pl-6 transition-all font-sans tracking-wide text-sm uppercase py-3 ml-4 pl-4" href="../index.html">
+          <span class="material-symbols-outlined">architecture</span><span  >Home</span>
+        </a>
+      </li>
+      <li>
+        <a class="flex items-center space-x-3 bg-[#fcf9f8] dark:bg-[#262423] text-[#8c4f10] dark:text-[#ffb77b] rounded-l-full ml-4 pl-4 py-3 shadow-sm font-sans tracking-wide text-sm uppercase" href="inventory.html">
+          <span class="material-symbols-outlined">layers</span><span>Materials</span>
+        </a>
+      </li>
+      <li>
+        <a class="flex items-center space-x-3 text-[#543b36]/60 dark:text-[#fcf9f8]/40 hover:pl-6 transition-all font-sans tracking-wide text-sm uppercase py-3 ml-4 pl-4" href="cost.html">
+          <span class="material-symbols-outlined">payments</span><span>Ledger</span>
+        </a>
+      </li>
+      <li>
+        <a class="flex items-center space-x-3 text-[#543b36]/60 dark:text-[#fcf9f8]/40 hover:pl-6 transition-all font-sans tracking-wide text-sm uppercase py-3 ml-4 pl-4" href="archive.html">
+          <span class="material-symbols-outlined">history</span><span>Archive</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="px-6 pt-4">
+    <button class="w-full py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-xl font-bold text-sm uppercase tracking-widest shadow-lg hover:brightness-110 active:scale-95 transition-all">
+      New Commission
+    </button>
+  </div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 p-4 sm:p-8 md:p-12 pb-32">
+<!-- Hero Header Section -->
+<header class="max-w-7xl mx-auto mb-8 md:mb-12">
+<div class="flex flex-col gap-6">
+<div>
+<h1 class="font-headline text-4xl sm:text-5xl md:text-6xl text-primary font-bold tracking-tight mb-3">Material Library</h1>
+<p class="font-body text-base md:text-lg text-on-surface-variant max-w-2xl leading-relaxed">Curating the finest hides, hardware, and threads. Precision tracking for the master craftsman.</p>
+</div>
+<div class="flex flex-wrap gap-3">
+<div class="bg-surface-container-high p-4 rounded-xl flex flex-col min-w-[130px] flex-1">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Total Value</span>
+<span id="statTotalValue" class="text-2xl font-bold text-primary">—</span>
+</div>
+<div class="bg-surface-container-high p-4 rounded-xl flex flex-col min-w-[130px] flex-1">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Alerts</span>
+<span id="statLowStock" class="text-2xl font-bold text-secondary">—</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Bento Grid -->
+<section class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 mb-12">
+<!-- Main Inventory List -->
+<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl p-5 sm:p-8 shadow-[0_12px_40px_rgba(84,59,54,0.05)]">
+<div class="flex items-center justify-between mb-8">
+<h2 class="font-headline text-2xl font-bold text-primary">Active Inventory</h2>
+<div class="flex space-x-2" id="filterTabs">
+<span class="px-4 py-1 bg-surface-container-low text-primary text-xs font-bold rounded-full">All</span>
+<span class="px-4 py-1 text-on-surface-variant text-xs font-bold rounded-full hover:bg-surface-container-low cursor-pointer">Hides</span>
+<span class="px-4 py-1 text-on-surface-variant text-xs font-bold rounded-full hover:bg-surface-container-low cursor-pointer">Hardware</span>
+</div>
+</div>
+<div class="space-y-6" id="inventoryRows">
+    <div class="flex items-center justify-center py-12 gap-3">
+        <span class="material-symbols-outlined text-secondary animate-spin">refresh</span>
+        <span class="text-sm text-on-surface-variant">Loading materials...</span>
+    </div>
+</div>
+</div>
+<!-- Side Insights & Forecasts -->
+<div class="lg:col-span-4 space-y-6 md:space-y-8">
+<!-- Forecast Card — populated by JS from DB -->
+<div class="bg-primary text-on-primary rounded-xl p-8 shadow-xl relative overflow-hidden">
+    <div class="relative z-10">
+        <h3 class="font-headline text-xl mb-4">Consumption Forecast</h3>
+        <div class="space-y-6" id="forecastBarsContainer">
+            <!-- Skeleton rows while loading -->
+            <div class="animate-pulse space-y-2">
+                <div class="h-3 bg-on-primary/20 rounded-full w-3/4"></div>
+                <div class="h-1 bg-on-primary/20 rounded-full w-full"></div>
+            </div>
+            <div class="animate-pulse space-y-2">
+                <div class="h-3 bg-on-primary/20 rounded-full w-1/2"></div>
+                <div class="h-1 bg-on-primary/20 rounded-full w-full"></div>
+            </div>
+        </div>
+        <button id="orderMaterialsBtn" class="mt-8 text-xs font-bold uppercase tracking-widest border-b border-on-primary/40 pb-1 hover:border-on-primary transition-all flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">shopping_cart</span>Order Materials
+        </button>
+    </div>
+    <div class="absolute -right-12 -bottom-12 opacity-10">
+        <span class="material-symbols-outlined text-9xl">trending_up</span>
+    </div>
+</div>
+<!-- Supplier Status — populated by JS from DB -->
+<div class="bg-surface-container-low rounded-xl p-8">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="font-headline text-xl text-primary">Partner Tanneries</h3>
+      <button id="addSupplierBtn" class="hidden material-symbols-outlined text-secondary hover:text-primary transition-colors text-lg" title="Add Supplier">add_circle</button>
+    </div>
+    <div class="space-y-4" id="partnerTanneriesContainer">
+        <!-- Skeleton while loading -->
+        <div class="animate-pulse flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-surface-container-highest"></div>
+            <div class="flex-1 space-y-2">
+                <div class="h-3 bg-surface-container-highest rounded w-3/4"></div>
+                <div class="h-2 bg-surface-container-highest rounded w-1/2"></div>
+            </div>
+        </div>
+        <div class="animate-pulse flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-surface-container-highest"></div>
+            <div class="flex-1 space-y-2">
+                <div class="h-3 bg-surface-container-highest rounded w-3/4"></div>
+                <div class="h-2 bg-surface-container-highest rounded w-1/2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="md:hidden bg-[#fcf9f8]/95 dark:bg-[#1b1c1c]/95 backdrop-blur-md fixed bottom-0 left-0 w-full z-50 h-20 flex justify-around items-center px-6 pb-safe border-t border-[#dac2b6]/20 shadow-[0_-8px_30px_rgba(84,59,54,0.1)]">
+<a class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#fcf9f8]/40 hover:text-[#543b36] dark:hover:text-[#fcf9f8] active:scale-90 transition-transform" href="../index.html">
+<span class="material-symbols-outlined">home_app_logo</span>
+<span class="font-sans text-[10px] font-medium tracking-widest uppercase mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#8c4f10] bg-[#8c4f10]/5 rounded-xl px-4 py-1 active:scale-90 transition-transform" href="inventory.html">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-sans text-[10px] font-medium tracking-widest uppercase mt-1">Vault</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#fcf9f8]/40 hover:text-[#543b36] dark:hover:text-[#fcf9f8] active:scale-90 transition-transform" href="archive.html">
+<span class="material-symbols-outlined">history</span>
+<span class="font-sans text-[10px] font-medium tracking-widest uppercase mt-1">Archive</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#543b36]/50 dark:text-[#fcf9f8]/40 hover:text-[#543b36] dark:hover:text-[#fcf9f8] active:scale-90 transition-transform" href="profile.html">
+<span class="material-symbols-outlined">person</span>
+<span class="font-sans text-[10px] font-medium tracking-widest uppercase mt-1">Me</span>
+</a>
+</nav>
+
+<!-- ── Add Item Modal (injected by JS) ── -->
+<div id="addItemModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[200] backdrop-blur-sm">
+    <div class="bg-surface-container-lowest rounded-xl shadow-2xl p-8 w-full max-w-md transform transition-all duration-300">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="font-serif text-2xl font-bold text-primary">Add Material</h2>
+            <button id="closeAddModal" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">close</button>
+        </div>
+        <form id="addItemForm" class="space-y-5">
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Item Name</label>
+                <input list="materialSuggestions" type="text" id="addName" autocomplete="off" required
+                    placeholder="Select or type a material name"
+                    class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 py-3 px-0 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm">
+                <datalist id="materialSuggestions"></datalist>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Category</label>
+                    <select id="addCategory" required class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 py-3 px-0 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm">
+                        <option value="Hides">Hides</option>
+                        <option value="Hardware">Hardware</option>
+                        <option value="Threads">Threads</option>
+                        <option value="Accessories">Accessories</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Unit</label>
+                    <input type="text" id="addUnit" placeholder="sq.ft / pcs / spools" required class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 py-3 px-0 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm">
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Stock Qty</label>
+                    <input type="number" id="addQty" required min="0" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 py-3 px-0 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Cost / Unit</label>
+                    <input type="number" id="addCost" step="0.01" required min="0" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 py-3 px-0 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Low Stock Threshold</label>
+                <input type="number" id="addThresh" required min="0" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 py-3 px-0 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm">
+            </div>
+            <p id="addItemError" class="text-xs text-error font-bold hidden"></p>
+            <div class="flex gap-4 pt-4">
+                <button type="button" id="cancelAddBtn" class="flex-1 py-3 border border-outline-variant/30 text-on-surface-variant font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-surface-container-low transition-all">Cancel</button>
+                <button type="submit" class="flex-1 py-3 bg-primary text-on-primary font-bold text-xs uppercase tracking-widest rounded-lg hover:opacity-90 transition-all">Add Item</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="../js/api.js"></script>
+<script src="../js/theme.js"></script>
+<script>
+// ── Globals ──
+let allInventoryItems = [];
+let currentUser = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!window.requireAuth()) return;
+    currentUser = window.getCurrentUser();
+
+    // ── Role-based UI setup ──
+    setupRoleUI();
+
+    // ── Fix Nav Links ──
+    document.querySelectorAll('header nav a').forEach(link => {
+        const text = link.textContent.trim().toLowerCase();
+        if (text.includes('workshop')) link.href = '../index.html';
+        if (text.includes('inventory')) link.href = 'inventory.html';
+        if (text.includes('journal') || text.includes('archive')) link.href = 'archive.html';
+    });
+    document.querySelectorAll('aside nav a').forEach(link => {
+        const text = link.textContent.trim().toLowerCase();
+        if (text.includes('blueprint')) link.href = '../index.html';
+        if (text.includes('material')) link.href = 'inventory.html';
+        if (text.includes('ledger') || text.includes('payment')) link.href = 'cost.html';
+        if (text.includes('archive')) link.href = 'archive.html';
+    });
+
+    // ── Load inventory from MongoDB ──
+    await loadInventory();
+
+    // ── Filter tabs ──
+    const filterTabs = document.querySelectorAll('#filterTabs span');
+    filterTabs.forEach(tab => {
+        tab.style.cursor = 'pointer';
+        tab.addEventListener('click', () => {
+            filterTabs.forEach(t => {
+                t.className = 'px-4 py-1 text-on-surface-variant text-xs font-bold rounded-full hover:bg-surface-container-low cursor-pointer';
+            });
+            tab.className = 'px-4 py-1 bg-surface-container-low text-primary text-xs font-bold rounded-full cursor-pointer';
+            const filter = tab.textContent.trim();
+            const filtered = filter === 'All'
+                ? allInventoryItems
+                : allInventoryItems.filter(i => i.category === filter);
+            renderInventoryRows(filtered);
+        });
+    });
+
+    // ── "New Commission" sidebar button triggers Add modal (admin only) ──
+    document.querySelectorAll('button').forEach(btn => {
+        if (btn.textContent.trim() === 'New Commission') {
+            btn.addEventListener('click', () => {
+                if (currentUser && currentUser.role === 'Admin') {
+                    openAddModal();
+                } else {
+                    showToast('Only Admins can add inventory items.', 'error');
+                }
+            });
+        }
+    });
+
+    // ── Wire category dropdown to update material name suggestions ──
+    const catSelect = document.getElementById('addCategory');
+    if (catSelect) {
+        catSelect.addEventListener('change', () => updateMaterialSuggestions(catSelect.value));
+        updateMaterialSuggestions(catSelect.value); // populate on initial load
+    }
+});
+
+// ── Role-based UI ──
+function setupRoleUI() {
+    const isAdmin = currentUser && currentUser.role === 'Admin';
+
+    // Show/hide add button with badge
+    const headerEl = document.querySelector('header.max-w-7xl');
+    if (headerEl) {
+        const badgeWrapper = document.createElement('div');
+        badgeWrapper.className = 'flex items-center gap-4';
+        badgeWrapper.innerHTML = `
+            <span class="role-badge-${isAdmin ? 'admin' : 'artisan'}">${currentUser ? currentUser.role : ''}</span>
+            ${isAdmin ? `<button id="addItemBtn" class="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded-xl text-xs font-bold uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all shadow-md">
+                <span class="material-symbols-outlined text-sm">add</span> Add Material
+            </button>` : ''}
+        `;
+        const existingFlex = headerEl.querySelector('.flex.flex-col.md\\:flex-row');
+        if (existingFlex) existingFlex.querySelector('div:last-child').appendChild(badgeWrapper);
+        else headerEl.appendChild(badgeWrapper);
+
+        if (isAdmin) {
+            document.getElementById('addItemBtn')?.addEventListener('click', openAddModal);
+        }
+    }
+}
+
+// ── Inventory Loading ──
+async function loadInventory() {
+    const inventoryRows = document.getElementById('inventoryRows');
+    if (inventoryRows) {
+        inventoryRows.innerHTML = `
+            <div class="flex items-center justify-center py-12 gap-3">
+                <span class="material-symbols-outlined text-secondary animate-spin">refresh</span>
+                <span class="text-sm text-on-surface-variant">Loading materials...</span>
+            </div>`;
+    }
+
+    try {
+        allInventoryItems = await window.api.getInventory();
+        renderInventoryRows(allInventoryItems);
+
+        // ── Update header stats using stable IDs (fixes logo overwrite bug) ──
+        const sym = window.getCurrencySymbol();
+        const totalValue = allInventoryItems.reduce((a, i) => a + ((i.stockQty || 0) * (i.costPerUnit || 0)), 0);
+        const lowCount = allInventoryItems.filter(i => i.stockQty <= i.lowStockThreshold).length;
+
+        const statValue = document.getElementById('statTotalValue');
+        const statLow   = document.getElementById('statLowStock');
+        if (statValue) statValue.textContent = `${sym}${totalValue.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+        if (statLow) {
+            statLow.textContent = `${lowCount} Low Stock`;
+            statLow.className = 'text-2xl font-bold ' + (lowCount > 0 ? 'text-error' : 'text-secondary');
+        }
+
+        // ── Update Consumption Forecast from DB ──
+        updateForecastBars(allInventoryItems);
+
+        // ── Update Partner Tanneries from DB ──
+        await loadSuppliers();
+
+        // ── Wire Download Report ──
+        const dlBtn = document.getElementById('downloadReportBtn');
+        if (dlBtn) {
+            dlBtn.onclick = () => downloadInventoryReport(allInventoryItems);
+        }
+
+        // ── Wire Order Materials ──
+        const orderBtn = document.getElementById('orderMaterialsBtn');
+        if (orderBtn) {
+            orderBtn.onclick = () => showOrderSheet(allInventoryItems);
+        }
+
+    } catch (err) {
+        console.error('Failed to load inventory:', err);
+        if (inventoryRows) {
+            inventoryRows.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-16 gap-3">
+                    <span class="material-symbols-outlined text-4xl text-error/60">cloud_off</span>
+                    <p class="text-center text-error font-bold text-sm">Could not connect to server</p>
+                    <p class="text-center text-on-surface-variant text-xs max-w-xs">Make sure the backend is running on <code class="bg-surface-container px-1 rounded">localhost:5001</code>. ${err.message}</p>
+                    <button onclick="loadInventory()" class="mt-2 px-4 py-2 bg-primary text-on-primary text-xs font-bold rounded-lg hover:opacity-90 transition-all">Retry</button>
+                </div>`;
+        }
+        // Clear forecast and tanneries on error
+        updateForecastBars([]);
+        const tc = document.getElementById('partnerTanneriesContainer');
+        if (tc) tc.innerHTML = `<p class="text-xs text-on-surface-variant opacity-60 text-center">Unavailable — server offline.</p>`;
+    }
+}
+
+// ── Load Suppliers from DB ────────────────────────────────────────────────
+async function loadSuppliers() {
+    const container = document.getElementById('partnerTanneriesContainer');
+    if (!container) return;
+    container.innerHTML = `
+        <div class="animate-pulse flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-surface-container-highest"></div>
+            <div class="flex-1 space-y-2"><div class="h-3 bg-surface-container-highest rounded w-3/4"></div><div class="h-2 bg-surface-container-highest rounded w-1/2"></div></div>
+        </div>`;
+    try {
+        const suppliers = await window.api.getSuppliers();
+        renderPartnerTanneries(suppliers, allInventoryItems);
+        // Show add button for admins
+        const isAdmin = currentUser && currentUser.role === 'Admin';
+        const addBtn  = document.getElementById('addSupplierBtn');
+        if (addBtn && isAdmin) {
+            addBtn.classList.remove('hidden');
+            addBtn.onclick = () => openSupplierModal();
+        }
+    } catch (err) {
+        container.innerHTML = `<p class="text-xs text-on-surface-variant opacity-60 text-center">Could not load suppliers: ${err.message}</p>`;
+    }
+}
+
+function renderPartnerTanneries(suppliers, inventoryItems) {
+    const container = document.getElementById('partnerTanneriesContainer');
+    if (!container) return;
+
+    if (!suppliers || suppliers.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-6 space-y-2">
+                <span class="material-symbols-outlined text-3xl text-on-surface-variant/30">store_mall_directory</span>
+                <p class="text-xs text-on-surface-variant/60">No suppliers yet.</p>
+                ${currentUser && currentUser.role === 'Admin' ? '<p class="text-xs text-secondary font-bold cursor-pointer" id="addFirstSupplierLink">+ Add your first supplier</p>' : ''}
+            </div>`;
+        document.getElementById('addFirstSupplierLink')?.addEventListener('click', openSupplierModal);
+        return;
+    }
+
+    // Compute low-stock categories from inventory
+    const lowByCategory = {};
+    inventoryItems.forEach(item => {
+        if (item.stockQty <= item.lowStockThreshold) {
+            lowByCategory[item.category] = (lowByCategory[item.category] || 0) + 1;
+        }
+    });
+
+    const isAdmin = currentUser && currentUser.role === 'Admin';
+    const mailSubject = encodeURIComponent('Restock Request — LeatherCraft Atelier');
+
+    container.innerHTML = suppliers.map(s => {
+        const cats       = s.categories || [];
+        const isCritical = cats.some(c => (lowByCategory[c] || 0) > 0);
+        const hasStock   = cats.some(c => inventoryItems.some(i => i.category === c && i.stockQty > i.lowStockThreshold));
+
+        let statusLabel, statusColor;
+        if (isCritical)    { statusLabel = 'Order Required';     statusColor = 'text-error'; }
+        else if (hasStock) { statusLabel = 'Stock Sufficient';   statusColor = 'text-[#2e7d32]'; }
+        else               { statusLabel = 'No Active Materials'; statusColor = 'text-on-surface-variant opacity-50'; }
+
+        // Build the low-stock item list for this supplier's categories
+        const lowItems = inventoryItems.filter(i =>
+            i.stockQty <= i.lowStockThreshold && cats.includes(i.category)
+        );
+        const bodyLines = [
+            `Dear ${s.name} Team,`,
+            '',
+            isCritical ? 'We urgently require restocking:' : 'We would like to place an order:',
+            '',
+            ...(lowItems.length
+                ? lowItems.map(i => `\u2022 ${i.itemName}: ${Math.max(i.lowStockThreshold * 3 - i.stockQty, 1)} ${i.unit}`)
+                : [`\u2022 ${cats.length ? cats.join(', ') : 'general'} materials (please advise availability)`]),
+            '',
+            'Please confirm availability and lead time.',
+            '',
+            'Best regards,',
+            'LeatherCraft Atelier'
+        ];
+        // Gmail compose URL — works in browser without a native mail app
+        const mailBody = bodyLines.join('\n');
+        const mailHref = s.email
+            ? `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(s.email)}&su=${mailSubject}&body=${encodeURIComponent(mailBody)}`
+            : `https://mail.google.com/mail/?view=cm&fs=1&su=${mailSubject}&body=${encodeURIComponent(mailBody)}`;
+
+
+        const icon     = isCritical ? 'add_shopping_cart' : 'mail';
+        const btnClass = isCritical
+            ? 'bg-error/10 text-error hover:bg-error/20'
+            : 'bg-surface-container hover:bg-surface-container-high text-on-surface-variant';
+
+        const deleteBtn = isAdmin
+            ? `<button data-action="delete-supplier" data-id="${s._id}"
+                 class="w-8 h-8 flex items-center justify-center rounded-lg bg-error/10 text-error hover:bg-error hover:text-white active:scale-95 transition-all" title="Remove supplier">
+                 <span class="material-symbols-outlined text-sm">delete</span></button>`
+            : '';
+
+        return `
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-primary text-xs flex-shrink-0">${s.initials || s.name.substring(0,2).toUpperCase()}</div>
+            <div class="flex-1 min-w-0">
+                <div class="text-sm font-bold text-primary truncate">${s.name}</div>
+                <div class="text-[10px] font-bold uppercase ${statusColor}">${statusLabel}</div>
+                ${cats.length ? `<div class="text-[9px] text-on-surface-variant/60 mt-0.5">${cats.join(' · ')}</div>` : ''}
+            </div>
+            <a href="${mailHref}" target="_blank" rel="noopener noreferrer"
+               class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg transition-all ${btnClass}"
+               title="${isCritical ? 'Order Now' : 'Contact Supplier'}">
+               <span class="material-symbols-outlined text-sm">${icon}</span>
+            </a>
+            ${deleteBtn}
+        </div>`;
+    }).join('');
+
+    // Delete buttons still need JS (API call)
+    container.querySelectorAll('[data-action="delete-supplier"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id   = btn.dataset.id;
+            const name = btn.closest('.flex').querySelector('.text-primary.truncate')?.textContent || 'this supplier';
+            deleteSupplier(id, name);
+        });
+    });
+}
+
+
+// ── Add Supplier Modal (Admin) ─────────────────────────────────────────────
+function openSupplierModal() {
+    document.getElementById('supplierModal')?.remove();
+    const modal = document.createElement('div');
+    modal.id = 'supplierModal';
+    modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[200]';
+    modal.innerHTML = `
+    <div class="bg-surface-container-lowest rounded-xl shadow-2xl w-full max-w-md p-8">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="font-serif text-2xl font-bold text-primary">Add Supplier</h2>
+            <button onclick="document.getElementById('supplierModal').remove()" class="material-symbols-outlined text-on-surface-variant hover:text-primary">close</button>
+        </div>
+        <form id="supplierForm" class="space-y-5">
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Company Name *</label>
+                <input id="sName" type="text" required placeholder="e.g. Horween Leather Co."
+                    class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm"/>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Categories Supplied (comma-separated)</label>
+                <input id="sCategories" type="text" placeholder="Hides, Hardware, Threads"
+                    class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm"/>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Contact Email</label>
+                <input id="sEmail" type="email" placeholder="orders@supplier.com"
+                    class="w-full bg-surface-container-low border-b-2 border-outline-variant py-3 px-2 text-on-surface focus:outline-none focus:border-secondary transition-all text-sm"/>
+            </div>
+            <p id="supplierErr" class="text-xs text-error font-bold hidden"></p>
+            <div class="flex gap-4 pt-2">
+                <button type="button" onclick="document.getElementById('supplierModal').remove()" class="flex-1 py-3 border border-outline-variant text-on-surface-variant font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-surface-container transition-all">Cancel</button>
+                <button type="submit" class="flex-1 py-3 bg-primary text-on-primary font-bold text-xs uppercase tracking-widest rounded-lg hover:opacity-90 active:scale-95 transition-all">Add Supplier</button>
+            </div>
+        </form>
+    </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+    document.getElementById('supplierForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const errEl = document.getElementById('supplierErr');
+        const name  = document.getElementById('sName').value.trim();
+        const cats  = document.getElementById('sCategories').value.split(',').map(c => c.trim()).filter(Boolean);
+        const email = document.getElementById('sEmail').value.trim();
+        try {
+            await window.api.createSupplier({ name, categories: cats, email });
+            modal.remove();
+            showToast('Supplier added!', 'success');
+            await loadSuppliers();
+        } catch (err) {
+            errEl.textContent = err.message;
+            errEl.classList.remove('hidden');
+        }
+    });
+}
+
+// ── Delete Supplier (Admin) ────────────────────────────────────────────────
+async function deleteSupplier(id, name) {
+    if (!confirm(`Remove "${name}" from Partner Tanneries?`)) return;
+    try {
+        await window.api.deleteSupplier(id);
+        showToast('Supplier removed', 'error');
+        await loadSuppliers();
+    } catch (err) {
+        showToast('Failed: ' + err.message, 'error');
+    }
+}
+
+
+function renderInventoryRows(items) {
+    const sym = window.getCurrencySymbol();
+    const isAdmin = currentUser && currentUser.role === 'Admin';
+    const container = document.getElementById('inventoryRows');
+    if (!container) return;
+
+    if (items.length === 0) {
+        container.innerHTML = `
+            <div class="flex flex-col items-center justify-center py-16 gap-4">
+                <span class="material-symbols-outlined text-5xl text-on-surface-variant/30">inventory_2</span>
+                <p class="text-on-surface-variant/60 font-body text-sm">
+                    ${isAdmin ? 'No items yet. Click "Add Material" to get started.' : 'No inventory items found.'}
+                </p>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = '';
+    items.forEach(item => {
+        const isLow = item.stockQty <= item.lowStockThreshold;
+        const statusClass = isLow ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800';
+        const statusText = isLow ? 'LOW STOCK' : 'IN STOCK';
+        const initials = (item.itemName || 'IT').substring(0, 2).toUpperCase();
+        const valueDisplay = `${sym}${((item.stockQty || 0) * (item.costPerUnit || 0)).toFixed(2)}`;
+        const usedPercent = Math.min(100, Math.max(5, Math.round((1 - item.stockQty / (item.lowStockThreshold * 5)) * 100)));
+
+        const row = document.createElement('div');
+        row.className = 'inventory-row group flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 -mx-4 hover:bg-surface-container-low rounded-xl transition-all duration-200';
+        row.innerHTML = `
+            <div class="w-16 h-16 rounded-xl bg-surface-container-highest flex items-center justify-center flex-shrink-0 border border-outline-variant/10">
+                <span class="font-serif font-bold text-xl" style="color: #543b36; opacity: 0.5">${initials}</span>
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="text-[10px] uppercase tracking-widest font-bold text-secondary mb-0.5">${item.category}</div>
+                <h3 class="font-serif text-base font-bold text-primary truncate">${item.itemName}</h3>
+                <div class="flex flex-wrap gap-3 mt-1">
+                    <span class="text-xs text-on-surface-variant">Qty: <strong class="${isLow ? 'text-error' : 'text-on-surface'}">${item.stockQty}</strong> ${item.unit}</span>
+                    <span class="text-xs text-on-surface-variant">Cost: <strong class="text-on-surface">${sym}${(item.costPerUnit || 0).toFixed(2)}/${item.unit}</strong></span>
+                    <span class="text-xs text-on-surface-variant">Value: <strong class="text-tertiary">${valueDisplay}</strong></span>
+                </div>
+                <div class="mt-2 w-full bg-surface-container-highest rounded-full h-1">
+                    <div class="h-1 rounded-full transition-all" style="width: ${Math.max(5, (item.stockQty / (item.lowStockThreshold * 3)) * 100)}%; background: ${isLow ? '#ba1a1a' : '#8c4f10'}"></div>
+                </div>
+            </div>
+            <div class="flex flex-col items-end gap-2 flex-shrink-0">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${statusClass}">${statusText}</span>
+                ${isAdmin ? `
+                <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button class="edit-btn p-1.5 rounded-lg hover:bg-surface-container-high transition-colors text-secondary" data-id="${item._id}" title="Edit">
+                        <span class="material-symbols-outlined text-sm">edit</span>
+                    </button>
+                    <button class="delete-btn p-1.5 rounded-lg hover:bg-red-50 transition-colors text-error" data-id="${item._id}" title="Delete">
+                        <span class="material-symbols-outlined text-sm">delete</span>
+                    </button>
+                </div>` : ''}
+            </div>
+        `;
+
+        // Admin action handlers
+        if (isAdmin) {
+            row.querySelector('.edit-btn')?.addEventListener('click', () => openEditModal(item));
+            row.querySelector('.delete-btn')?.addEventListener('click', () => confirmDelete(item));
+        }
+
+        container.appendChild(row);
+    });
+}
+
+// ── Material name suggestions per category ──
+const MATERIAL_SUGGESTIONS = {
+    Hides: [
+        'Horween Chromexcel', 'Wickett & Craig Vachetta', 'English Bridle Leather',
+        'Hermann Oak Skirting', 'Badalassi Carlo Pueblo', 'Conceria Walpier Buttero',
+        'Sedgwick Natural Bridle', 'Charles F Stead Suede', 'Tannerie Roux Calf'
+    ],
+    Hardware: [
+        'Solid Brass Roller Buckle', 'Antique Brass D-Ring', 'Chicago Screws (Pack)',
+        'Solid Brass Snap Hook', 'Copper Rivets & Burrs', 'Brushed Nickel Ring',
+        'Solid Brass Turn Lock', 'Magnetic Snap Closure', 'Brass Swivel Clasp'
+    ],
+    Threads: [
+        'Vinymo MBT #5', 'Tiger Thread 0.6mm', 'Ritza 25 Tiger Thread',
+        'Barbour Irish Linen Thread', 'Fil Au Chinois Lin Cable', 'Waxed Linen Thread',
+        'Polyester Sewing Thread', 'Aramid Kevlar Thread', 'Gutermann Kraft Thread'
+    ],
+    Leather: [
+        'Full-Grain Natural Leather', 'Top-Grain Corrected Leather', 'Nubuck Leather',
+        'Patent Leather', 'Saffiano Leather', 'Embossed Crocodile Leather'
+    ],
+    Accessories: [
+        'Leather Edge Paint', 'Beeswax Block', 'Tokonole Burnishing Agent',
+        'Contact Cement Adhesive', 'Edge Beveler #2', 'Wing Divider Compass',
+        'Bone Folder Tool', 'Stitching Chisel Set', 'Saddle Soap'
+    ]
+};
+
+function updateMaterialSuggestions(category) {
+    const datalist = document.getElementById('materialSuggestions');
+    if (!datalist) return;
+    const suggestions = MATERIAL_SUGGESTIONS[category] || [];
+    datalist.innerHTML = suggestions.map(s => `<option value="${s}">`).join('');
+}
+
+// ── Consumption Forecast from DB ──
+function updateForecastBars(items) {
+    const container = document.getElementById('forecastBarsContainer');
+    if (!container) return;
+
+    if (!items || items.length === 0) {
+        container.innerHTML = `<p class="text-xs opacity-60 text-center">No inventory data to forecast.</p>`;
+        return;
+    }
+
+    // Sort by stock fill ratio (lowest % = most critical/consumed)
+    const sorted = [...items]
+        .filter(i => i.lowStockThreshold > 0)
+        .sort((a, b) => (a.stockQty / a.lowStockThreshold) - (b.stockQty / b.lowStockThreshold));
+
+    const top = sorted.slice(0, 3); // show top 3 most critical
+
+    container.innerHTML = top.map(item => {
+        const maxCapacity = Math.max(item.lowStockThreshold * 5, item.stockQty);
+        const usedPct = Math.min(100, Math.round(((maxCapacity - item.stockQty) / maxCapacity) * 100));
+        const stockPct = 100 - usedPct;
+        const urgencyColor = usedPct >= 80 ? 'bg-red-400' : usedPct >= 55 ? 'bg-secondary-fixed' : 'bg-tertiary-fixed';
+        return `
+        <div>
+            <div class="flex justify-between text-xs font-bold uppercase tracking-widest opacity-80 mb-2">
+                <span class="truncate max-w-[65%]">${item.itemName}</span>
+                <span>${usedPct}% Used</span>
+            </div>
+            <div class="w-full bg-on-primary/20 h-1 rounded-full">
+                <div class="${urgencyColor} h-full rounded-full transition-all duration-700" style="width: ${usedPct}%"></div>
+            </div>
+            <div class="text-[10px] opacity-60 mt-1">${item.stockQty} ${item.unit} remaining · threshold ${item.lowStockThreshold}</div>
+        </div>`;
+    }).join('');
+}
+
+// ── Partner Tanneries — DB-driven supplier urgency ──
+const TANNERY_CATALOGUE = [
+    { initials: 'HC', name: 'Horween Leather Co.',      categories: ['Hides', 'Leather'] },
+    { initials: 'WC', name: 'Wickett & Craig',           categories: ['Hides'] },
+    { initials: 'BG', name: 'Badalassi Carlo',           categories: ['Leather'] },
+    { initials: 'SO', name: 'Sinabruk Outfitters',       categories: ['Threads', 'Accessories'] },
+    { initials: 'KH', name: 'Kingsland Hardware',        categories: ['Hardware'] }
+];
+
+function updatePartnerTanneries(items) {
+    const container = document.getElementById('partnerTanneriesContainer');
+    if (!container) return;
+
+    // Find which categories have low/critical stock
+    const lowByCategory = {};
+    items.forEach(item => {
+        if (item.stockQty <= item.lowStockThreshold) {
+            lowByCategory[item.category] = (lowByCategory[item.category] || 0) + 1;
+        }
+    });
+
+    container.innerHTML = TANNERY_CATALOGUE.map(tannery => {
+        // Determine if any of this supplier's categories are low
+        const isCritical = tannery.categories.some(cat => (lowByCategory[cat] || 0) > 0);
+        const hasStock  = tannery.categories.some(cat =>
+            items.some(i => i.category === cat && i.stockQty > i.lowStockThreshold)
+        );
+
+        let statusLabel, statusColor, icon;
+        if (isCritical) {
+            statusLabel = 'Order Required';
+            statusColor = 'text-error font-bold uppercase';
+            icon = 'warning';
+        } else if (hasStock) {
+            statusLabel = 'Stock Sufficient';
+            statusColor = 'text-[#2e7d32] font-bold uppercase';
+            icon = 'check_circle';
+        } else {
+            statusLabel = 'No Active Materials';
+            statusColor = 'text-on-surface-variant font-bold uppercase opacity-60';
+            icon = 'radio_button_unchecked';
+        }
+
+        return `
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-primary text-xs flex-shrink-0">${tannery.initials}</div>
+            <div class="flex-1 min-w-0">
+                <div class="text-sm font-bold text-primary truncate">${tannery.name}</div>
+                <div class="text-[10px] ${statusColor}">${statusLabel}</div>
+            </div>
+            <button onclick="orderFromTannery('${tannery.name}', '${tannery.categories.join(', ')}', ${isCritical})"
+              class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg transition-all ${isCritical ? 'bg-error/10 text-error hover:bg-error/20' : 'bg-surface-container hover:bg-surface-container-high text-on-surface-variant'}"
+              title="${isCritical ? 'Order Now' : 'Contact Supplier'}">
+              <span class="material-symbols-outlined text-sm">${isCritical ? 'add_shopping_cart' : 'mail'}</span>
+            </button>
+        </div>`;
+    }).join('');
+}
+
+// ── Download Inventory Report (CSV) ──────────────────────────────────────
+function downloadInventoryReport(items) {
+    if (!items || items.length === 0) {
+        showToast('No inventory to export', 'error');
+        return;
+    }
+    const sym = window.getCurrencySymbol();
+    const rows = [
+        ['Item Name', 'Category', 'Stock Qty', 'Unit', `Cost/Unit (${sym})`, `Total Value (${sym})`, 'Low Stock Threshold', 'Status'],
+        ...items.map(i => [
+            `"${i.itemName}"`,
+            i.category,
+            i.stockQty,
+            i.unit,
+            (i.costPerUnit || 0).toFixed(2),
+            ((i.stockQty || 0) * (i.costPerUnit || 0)).toFixed(2),
+            i.lowStockThreshold,
+            i.stockQty <= i.lowStockThreshold ? 'LOW STOCK' : 'IN STOCK'
+        ])
+    ];
+    const csv  = rows.map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `LeatherCraft_Inventory_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Report downloaded!', 'success');
+}
+
+// ── Order Sheet Modal ──────────────────────────────────────────────────────
+function showOrderSheet(items) {
+    const lowItems = items.filter(i => i.stockQty <= i.lowStockThreshold);
+    const sym = window.getCurrencySymbol();
+
+    // Remove any existing order modal
+    document.getElementById('orderSheetModal')?.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'orderSheetModal';
+    modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[200]';
+
+    const rows = lowItems.length ? lowItems.map(i => {
+        const suggestedQty = Math.max(i.lowStockThreshold * 3 - i.stockQty, 1);
+        const estimatedCost = (suggestedQty * (i.costPerUnit || 0)).toFixed(2);
+        return `<tr class="border-b border-outline-variant/10 hover:bg-surface-container-low transition-colors">
+            <td class="px-4 py-3 text-sm font-bold text-primary">${i.itemName}</td>
+            <td class="px-4 py-3 text-xs text-on-surface-variant">${i.category}</td>
+            <td class="px-4 py-3 text-xs text-error font-bold">${i.stockQty} ${i.unit}</td>
+            <td class="px-4 py-3 text-xs font-bold text-secondary">${suggestedQty} ${i.unit}</td>
+            <td class="px-4 py-3 text-xs text-on-surface-variant">${sym}${estimatedCost}</td>
+        </tr>`;
+    }).join('') : `<tr><td colspan="5" class="px-4 py-8 text-center text-sm text-on-surface-variant/60">All materials are well stocked ✓</td></tr>`;
+
+    const totalCost = lowItems.reduce((sum, i) => {
+        return sum + ((Math.max(i.lowStockThreshold * 3 - i.stockQty, 1)) * (i.costPerUnit || 0));
+    }, 0);
+
+    modal.innerHTML = `
+    <div class="bg-surface-container-lowest rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col">
+        <div class="flex items-center justify-between p-6 border-b border-outline-variant/10">
+            <div>
+                <h2 class="font-serif text-2xl font-bold text-primary">Order Sheet</h2>
+                <p class="text-xs text-on-surface-variant mt-1">${lowItems.length} item${lowItems.length !== 1 ? 's' : ''} need restocking</p>
+            </div>
+            <button onclick="document.getElementById('orderSheetModal').remove()" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">close</button>
+        </div>
+        <div class="overflow-auto flex-1">
+            <table class="w-full text-left">
+                <thead class="bg-surface-container-high sticky top-0">
+                    <tr>
+                        <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Item</th>
+                        <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Category</th>
+                        <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Current</th>
+                        <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Order Qty</th>
+                        <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Est. Cost</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>
+        <div class="flex items-center justify-between p-6 border-t border-outline-variant/10 gap-4 flex-wrap">
+            <div>
+                <p class="text-xs text-on-surface-variant">Estimated Total</p>
+                <p class="font-serif text-xl font-bold text-primary">${sym}${totalCost.toFixed(2)}</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="downloadOrderSheet()" class="px-5 py-3 bg-surface-container text-primary text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-surface-container-high transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">download</span> Export
+                </button>
+                <button onclick="document.getElementById('orderSheetModal').remove()" class="px-5 py-3 bg-primary text-on-primary text-xs font-bold uppercase tracking-widest rounded-xl hover:opacity-90 active:scale-95 transition-all">Done</button>
+            </div>
+        </div>
+    </div>`;
+
+    document.body.appendChild(modal);
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+}
+
+// ── Export Order Sheet as TXT ──────────────────────────────────────────────
+function downloadOrderSheet() {
+    const sym   = window.getCurrencySymbol();
+    const items = allInventoryItems.filter(i => i.stockQty <= i.lowStockThreshold);
+    const lines = [
+        'LEATHERCRAFT — RESTOCK ORDER SHEET',
+        `Generated: ${new Date().toLocaleString('en-IN')}`,
+        '='.repeat(50),
+        '',
+        ...items.map(i => {
+            const qty = Math.max(i.lowStockThreshold * 3 - i.stockQty, 1);
+            return `• ${i.itemName} (${i.category})\n  Current: ${i.stockQty} ${i.unit} | Order: ${qty} ${i.unit} | Est: ${sym}${(qty * (i.costPerUnit || 0)).toFixed(2)}`;
+        }),
+        '',
+        '='.repeat(50)
+    ];
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `LeatherCraft_OrderSheet_${new Date().toISOString().slice(0,10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Order sheet downloaded!', 'success');
+}
+
+// ── Tannery Order / Contact ────────────────────────────────────────────────
+function orderFromTannery(name, email, categories, isCritical) {
+    const cats     = categories ? categories.split(', ').filter(Boolean) : [];
+    const lowItems = allInventoryItems.filter(i =>
+        i.stockQty <= i.lowStockThreshold && cats.includes(i.category)
+    );
+    const subject = `Restock Request — LeatherCraft Atelier`;
+    const bodyLines = [
+        `Dear ${name} Team,`,
+        '',
+        isCritical
+            ? 'We urgently require restocking of the following materials:'
+            : 'We would like to place an order for the following materials:',
+        '',
+        ...(lowItems.length
+            ? lowItems.map(i => `\u2022 ${i.itemName}: ${Math.max(i.lowStockThreshold * 3 - i.stockQty, 1)} ${i.unit}`)
+            : [`\u2022 ${categories || 'materials'} (please advise availability)`]),
+        '',
+        'Please confirm availability and lead time at your earliest convenience.',
+        '',
+        'Best regards,',
+        'LeatherCraft Atelier'
+    ];
+    const to      = email || '';
+    const mailto  = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+    window.location.href = mailto;
+}
+
+// ── Add Item Modal ──
+function openAddModal() {
+    document.getElementById('addItemModal').classList.remove('hidden');
+    document.getElementById('addName').focus();
+}
+function closeAddModal() {
+    document.getElementById('addItemModal').classList.add('hidden');
+    document.getElementById('addItemForm').reset();
+    document.getElementById('addItemError').classList.add('hidden');
+}
+document.getElementById('closeAddModal').addEventListener('click', closeAddModal);
+document.getElementById('cancelAddBtn').addEventListener('click', closeAddModal);
+document.getElementById('addItemModal').addEventListener('click', e => { if (e.target.id === 'addItemModal') closeAddModal(); });
+
+document.getElementById('addItemForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errEl = document.getElementById('addItemError');
+    errEl.classList.add('hidden');
+    const submitBtn = e.target.querySelector('[type=submit]');
+    submitBtn.textContent = 'Saving...';
+    submitBtn.disabled = true;
+
+    const payload = {
+        itemName: document.getElementById('addName').value.trim(),
+        category: document.getElementById('addCategory').value,
+        stockQty: parseFloat(document.getElementById('addQty').value),
+        unit: document.getElementById('addUnit').value.trim(),
+        costPerUnit: parseFloat(document.getElementById('addCost').value),
+        lowStockThreshold: parseFloat(document.getElementById('addThresh').value)
+    };
+
+    try {
+        await window.api.addInventory(payload);
+        closeAddModal();
+        showToast('Material added successfully!', 'success');
+        await loadInventory();
+    } catch (err) {
+        errEl.textContent = err.message;
+        errEl.classList.remove('hidden');
+    } finally {
+        submitBtn.textContent = 'Add Item';
+        submitBtn.disabled = false;
+    }
+});
+
+// ── Edit Modal (reuse add modal structure) ──
+function openEditModal(item) {
+    document.getElementById('addItemModal').classList.remove('hidden');
+    document.querySelector('#addItemModal h2').textContent = 'Edit Material';
+    document.getElementById('addName').value = item.itemName;
+    document.getElementById('addCategory').value = item.category;
+    document.getElementById('addQty').value = item.stockQty;
+    document.getElementById('addUnit').value = item.unit;
+    document.getElementById('addCost').value = item.costPerUnit;
+    document.getElementById('addThresh').value = item.lowStockThreshold;
+
+    // Swap submit handler
+    const form = document.getElementById('addItemForm');
+    const newForm = form.cloneNode(true);
+    form.parentNode.replaceChild(newForm, form);
+
+    newForm.querySelector('#closeAddModal') && (newForm.querySelector('#closeAddModal').onclick = () => resetAndCloseModal());
+    newForm.querySelector('#cancelAddBtn') && (newForm.querySelector('#cancelAddBtn').onclick = () => resetAndCloseModal());
+
+    newForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const errEl = newForm.querySelector('#addItemError');
+        const payload = {
+            stockQty: parseFloat(newForm.querySelector('#addQty').value),
+            costPerUnit: parseFloat(newForm.querySelector('#addCost').value)
+        };
+        try {
+            await window.api.updateInventory(item._id, payload);
+            resetAndCloseModal();
+            showToast('Item updated!', 'success');
+            await loadInventory();
+        } catch (err) {
+            errEl.textContent = err.message;
+            errEl.classList.remove('hidden');
+        }
+    });
+}
+
+function resetAndCloseModal() {
+    document.getElementById('addItemModal').classList.add('hidden');
+    // Restore original form listeners by reloading page state
+    location.reload();
+}
+
+// ── Delete confirmation ──
+async function confirmDelete(item) {
+    if (!confirm(`Delete "${item.itemName}"? This cannot be undone.`)) return;
+    try {
+        await window.api.deleteInventory(item._id);
+        showToast('Item deleted.', 'error');
+        await loadInventory();
+    } catch (err) {
+        showToast('Delete failed: ' + err.message, 'error');
+    }
+}
+
+// ── Toast notifications ──
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    const color = type === 'success' ? 'bg-primary text-on-primary' : 'bg-error-container text-on-error-container';
+    toast.className = `fixed bottom-28 right-6 z-[300] px-6 py-3 rounded-xl shadow-2xl text-sm font-bold ${color} transform translate-y-4 opacity-0 transition-all duration-300`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => { toast.classList.replace('translate-y-4', 'translate-y-0'); toast.classList.replace('opacity-0', 'opacity-100'); });
+    setTimeout(() => {
+        toast.classList.replace('translate-y-0', 'translate-y-4');
+        toast.classList.replace('opacity-100', 'opacity-0');
+        setTimeout(() => toast.remove(), 350);
+    }, 3000);
+}
+</script>
+</body></html>
