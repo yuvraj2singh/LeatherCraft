@@ -430,6 +430,9 @@
       let res;
       if (isLoginMode) {
         res = await window.api.login(email, password);
+        if (res.role !== selectedRole) {
+          throw new Error(`This account is ${res.role}, not ${selectedRole}. Choose the correct role tab or use a different account.`);
+        }
       } else {
         const name = document.getElementById('artisan-name').value.trim();
         res = await window.api.register(name, email, password, selectedRole);

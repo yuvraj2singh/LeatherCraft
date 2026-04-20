@@ -57,9 +57,9 @@ For the frontend, just open `frontend/index.html` in your browser, or run it thr
 
 ## First time setup
 
-The database starts empty, so you'll need to create your first user via the register form. By default everyone registers as an `Artisan`, which is read-only for most things.
+The database starts empty, so you'll need to create your first user via the register form. On a fresh database, the first account registered with role `Admin` is allowed and becomes your bootstrap admin account.
 
-To give yourself admin access, open MongoDB Compass (or the shell) and manually change your user's `role` field to `"Admin"`. After that you can manage other users' roles from the Profile page without touching the database again.
+After at least one admin exists, new registrations keep the selected non-admin roles and cannot self-elevate to admin.
 
 ---
 

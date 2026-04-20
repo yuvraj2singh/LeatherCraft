@@ -167,10 +167,13 @@
 <div class="lg:col-span-8 bg-surface-container-lowest rounded-xl p-5 sm:p-8 shadow-[0_12px_40px_rgba(84,59,54,0.05)]">
 <div class="flex items-center justify-between mb-8">
 <h2 class="font-headline text-2xl font-bold text-primary">Active Inventory</h2>
+<div class="flex items-center gap-2">
+<button id="downloadReportBtn" class="px-3 py-1.5 bg-surface-container-low text-primary text-[10px] font-bold uppercase tracking-widest rounded-full hover:bg-surface-container transition-all">Download Report</button>
 <div class="flex space-x-2" id="filterTabs">
 <span class="px-4 py-1 bg-surface-container-low text-primary text-xs font-bold rounded-full">All</span>
 <span class="px-4 py-1 text-on-surface-variant text-xs font-bold rounded-full hover:bg-surface-container-low cursor-pointer">Hides</span>
 <span class="px-4 py-1 text-on-surface-variant text-xs font-bold rounded-full hover:bg-surface-container-low cursor-pointer">Hardware</span>
+</div>
 </div>
 </div>
 <div class="space-y-6" id="inventoryRows">
@@ -698,7 +701,7 @@ function renderInventoryRows(items) {
                     <span class="text-xs text-on-surface-variant">Value: <strong class="text-tertiary">${valueDisplay}</strong></span>
                 </div>
                 <div class="mt-2 w-full bg-surface-container-highest rounded-full h-1">
-                    <div class="h-1 rounded-full transition-all" style="width: ${Math.max(5, (item.stockQty / (item.lowStockThreshold * 3)) * 100)}%; background: ${isLow ? '#ba1a1a' : '#8c4f10'}"></div>
+                    <div class="h-1 rounded-full transition-all" style="width: ${Math.min(100, Math.max(5, (item.stockQty / (item.lowStockThreshold * 3)) * 100))}%; background: ${isLow ? '#ba1a1a' : '#8c4f10'}"></div>
                 </div>
             </div>
             <div class="flex flex-col items-end gap-2 flex-shrink-0">
@@ -982,7 +985,7 @@ function downloadOrderSheet() {
 }
 
 // ── Tannery Order / Contact ────────────────────────────────────────────────
-function orderFromTannery(name, email, categories, isCritical) {
+function orderFromTannery(name, categories, isCritical, email = '') {
     const cats     = categories ? categories.split(', ').filter(Boolean) : [];
     const lowItems = allInventoryItems.filter(i =>
         i.stockQty <= i.lowStockThreshold && cats.includes(i.category)

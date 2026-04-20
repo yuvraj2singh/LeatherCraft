@@ -642,11 +642,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let newItem = { itemName: name, source, costPerUnit: cost };
 
     try {
-      // Save to MongoDB inventory with category='hardware'
+      // Save to MongoDB inventory with category matching schema enum
       const saved = await window.api.addInventory({
         itemName:          name,
         supplier:          source,
-        category:          'hardware',
+        category:          'Hardware',
         costPerUnit:       cost,
         stockQty:          1,
         unit:              'pcs',
